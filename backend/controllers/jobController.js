@@ -10,6 +10,7 @@ export const getAllJobs=async(req,res)=>{
     }
 }
 
+
 export const addJobs=async(req,res)=>{
     try {
         const {title,description,location,salary,requirements,jobType,status}=req.body

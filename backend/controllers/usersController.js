@@ -3,7 +3,7 @@ import Job from "../models/Job.js"
 
 export const getUserProfile = async (req, res) => {
     try {
-        // req.user contains the authenticated user
+        // req.user contains the authenticated user's information
         const currentUser = req.user;
         
         res.json({

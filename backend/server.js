@@ -13,7 +13,7 @@ dotenv.config()
 app.use(cookieParser())
 app.use(express.json())
 app.use(cors({
-    origin:"http://localhost:8000",
+    origin:`http://localhost:${process.env.FRONTEND_PORT}`,
     credentials:true,
 }))
 const PORT=process.env.PORT||8000

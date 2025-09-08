@@ -4,9 +4,10 @@ import jwt from "jsonwebtoken"
 
 
 export async function signup(req, res) {
-    const { fullName, email, password, role,bio,skills } = req.body;
+    const { fullName, email, password, role} = req.body;
+    console.log(fullName,email,password,role)
     try{
-     if(!fullName || !email || !password || !role || !bio || !skills){
+     if(!fullName || !email || !password || !role){
         return res.status(400).json({message:"All fields are required"})
      }
      if(password.length < 6){
@@ -33,7 +34,6 @@ export async function signup(req, res) {
       password:hashedpassword,
       role,
       profilePic:randomAvatar,
-      bio,skills
     })
   
     const token=jwt.sign({userId:newUser._id},process.env.JWT_SECRET,{expiresIn:'7d'})
@@ -44,7 +44,7 @@ export async function signup(req, res) {
       sameSite:"strict",
       secure: process.env.NODE_ENV === 'production'
     })
-    res.status(201).json({success:true,user:newUser,token});
+    res.status(200).json({success:true,user:newUser,token});
   }
     catch(error){
       console.error("Error during signup:", error);
@@ -54,8 +54,8 @@ export async function signup(req, res) {
   
   export async function login(req, res) {
     try{
-      const {email,password}=req.body
-      if(!email || !password){
+      const {email,password,role}=req.body
+      if(!email || !password || !role){
         return res.status(400).json({message:"All fields are required"})
       }
       const user=await User.findOne({email})
@@ -65,6 +65,10 @@ export async function signup(req, res) {
       const ispasswordValid=await bcrypt.compare(password,user.password)
       if(!ispasswordValid){
         return res.status(401).json({message:"Invalid Email or Password"})
+      }
+      const isRolevalid=user.role===role
+      if(!isRolevalid){
+        return res.status(401).json({message:"Invalid role selected"})
       }
       const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'7d'})
   
@@ -103,7 +107,6 @@ export async function getCurrentUser(req, res) {
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // Find the user
     const user = await User.findById(decoded.userId).select('-password');
     
     if (!user) {

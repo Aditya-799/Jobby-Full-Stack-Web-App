@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const jobSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+    required: false,
     ref: 'User'
   },
   title: {
@@ -27,6 +27,14 @@ const jobSchema = new mongoose.Schema({
   requirements: {
     type: [String],
     required: false,
+  },
+  company_logo_url: {
+    type: String,
+    required: true
+  },
+  company_name: {
+    type: String,
+    required: true
   },
   jobType: {
     type: String,
