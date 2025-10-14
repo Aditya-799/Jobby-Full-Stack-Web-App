@@ -45,7 +45,7 @@ const CardContainer = (props) => {
                 <p>{employmentType}</p>
               </div>
             </div>
-            <p className="package">{packagePerAnnum}</p>
+            <p className="package">{packagePerAnnum} LPA</p>
           </div>
         </div>
         <div className="card-bottom-section">

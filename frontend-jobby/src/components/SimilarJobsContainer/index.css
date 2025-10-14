@@ -1,0 +1,34 @@
+.sj-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #272727;
+    width: 100%;
+    max-width: 280px;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 15px;
+    margin-right: 10px;
+  }
+  .sj-desc-heading {
+    font-size: 20px;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .desc-container {
+    color: white;
+  }
+  
+  @media (min-width: 767px) {
+    .sj-container {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      margin-top: 20px;
+      margin-right: 20px;
+    }
+    .sj-desc-heading {
+      font-size: 24px;
+    }
+  }
+  

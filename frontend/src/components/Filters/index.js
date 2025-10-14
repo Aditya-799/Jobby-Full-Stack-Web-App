@@ -5,12 +5,12 @@ const totalLabel = [
   {
     label: 'Full Time',
     isLabelPresent: false,
-    employmentTypeId: 'Full Time',
+    employmentTypeId: 'Full-time',
   },
   {
     label: 'Part Time',
     isLabelPresent: false,
-    employmentTypeId: 'Part Time',
+    employmentTypeId: 'Part-time',
   },
   {
     label: 'Freelance',

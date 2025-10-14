@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 import ProfileContainer from '../ProfileContainer'
 import CardContainer from '../CardContainer'
 import Filters from '../Filters'
+import axios from 'axios'
 import Header from '../Header'
 import './index.css'
 
@@ -30,35 +31,38 @@ class Jobs extends Component {
   convertTocamelCase = data => {
     const newData = data.map(eachItem => ({
       companyLogoUrl: eachItem.company_logo_url,
-      employmentType: eachItem.employment_type,
-      id: eachItem.id,
-      jobDescription: eachItem.job_description,
+      employmentType: eachItem.jobType,
+      id: eachItem._id,
+      jobDescription: eachItem.description,
+      Requirements:eachItem.requirements,
       location: eachItem.location,
-      packagePerAnnum: eachItem.package_per_annum,
+      packagePerAnnum: eachItem.salary,
       rating: eachItem.rating,
       title: eachItem.title,
+      jobApplicants:eachItem.jobApplicants,
+      status:eachItem.status
     }))
     this.setState({jobsList: newData, isLoading: false})
   }
 
-  getJobs = async () => {
-    const {employmentType, minimumPackage, searchInput} = this.state
-    const url = `${process.env.REACT_APP_BACKEND_URL}api/get/AllJobs?employmentType=${employmentType}&search=${searchInput}&minimumPackage=${minimumPackage}`
+  getJobs = async () =>{
+    const {searchInput,minimumPackage,employmentType} = this.state
+    const employementlist=employmentType.trim().split(',')
+    const url = `http://localhost:8000/api/jobs/get/alljobs?search_q=${searchInput}&minimum_package=${minimumPackage}&employementType=${employementlist}`
     const jwtToken = Cookies.get('jwtToken')
-    const options = {
+    const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
         'Content-Type': 'application/json',
-      },
-      method: 'GET',
+      }
+    })
+    if(response.status===200 || response.statusText==='OK'){
+      const {data}=response
+      this.convertTocamelCase(data)
     }
-    const response = await fetch(url, options)
-    if (response.ok === true) {
-      const jsonData = await response.json()
-      console.log(jsonData)
-      this.convertTocamelCase(jsonData.jobs)
-    } else {
-      this.setState({isFailure: true})
+    else{
+      console.log("error")
+      this.setState({isLoading:false,isFailure:true})
     }
   }
 

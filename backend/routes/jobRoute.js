@@ -5,9 +5,11 @@ import {getAllJobs,addJobs,getJobById,deleteJob,updateJob,getApplicants} from ".
 
 const router=express.Router()
 
+router.get('/get/alljobs',getAllJobs)
+
 router.use(protectRoute)
 
-router.get('/get/alljobs',getAllJobs)
+
 
 router.get('/get/job/:id',getJobById)
 

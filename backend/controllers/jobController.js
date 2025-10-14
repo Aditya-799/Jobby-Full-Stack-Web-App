@@ -1,14 +1,42 @@
 import Job from "../models/Job.js"
 import User from "../models/Users.js"
 
-export const getAllJobs=async(req,res)=>{
+
+export const getAllJobs = async (req, res) => {
     try {
-        const jobs=await Job.find()
-        res.status(200).json(jobs)
+      const { search_q='', minimum_package=0,employementType} = req.query;
+      let query = {};
+  
+      if (search_q) {
+        query.title = { $regex: search_q, $options: 'i' };
+      }
+  
+      if (minimum_package) {
+        const minPackage = Number(minimum_package)/100000;
+        if (!isNaN(minPackage)) {
+          query.salary = { $gte: (minPackage) };
+        }
+      }
+      if (employementType && employementType.length > 0) {
+        // Split comma-separated string if needed
+        const types = Array.isArray(employementType) 
+          ? employementType 
+          : employementType.split(',').map(s => s.trim()).filter(Boolean)
+        
+        if (types.length > 0) {
+          query.jobType = { $in: types }
+        }
+      }
+  
+      const jobs = await Job.find(query);
+  
+      res.status(200).json(jobs);
+      
     } catch (error) {
-        res.status(500).json({message:error.message})
+      console.error('Error fetching jobs:', error);
+      res.status(500).json({ message: 'An unexpected error occurred.' });
     }
-}
+  };
 
 
 export const addJobs=async(req,res)=>{

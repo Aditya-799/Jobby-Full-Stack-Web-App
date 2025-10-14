@@ -3,6 +3,7 @@ import Signup from './components/Signup'
 import Jobs from './components/Jobs'
 import Home from './components/Home'
 import ProtectedRoute from './components/ProtectedRoute'
+import JobItemDetails from './components/JobItemDetails'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Component } from 'react'
 import NotFound from './components/NotFound'
@@ -10,19 +11,19 @@ import NotFound from './components/NotFound'
 const employmentTypesList = [
   {
     label: 'Full Time',
-    employmentTypeId: 'FULLTIME',
+    employmentTypeId: 'Full-time',
   },
   {
     label: 'Part Time',
-    employmentTypeId: 'PARTTIME',
+    employmentTypeId: 'Part-time',
   },
   {
     label: 'Freelance',
-    employmentTypeId: 'FREELANCE',
+    employmentTypeId: 'Freelance',
   },
   {
     label: 'Internship',
-    employmentTypeId: 'INTERNSHIP',
+    employmentTypeId: 'Internship',
   },
 ]
 
@@ -63,6 +64,7 @@ class App extends Component {
         </ProtectedRoute>
       }
     />
+                    <Route exact path="/jobs/:id" element={<ProtectedRoute><JobItemDetails/></ProtectedRoute>}/>
                     <Route exact path="/" element={<Signup />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
