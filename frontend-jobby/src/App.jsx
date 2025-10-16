@@ -1,16 +1,14 @@
-//import Login from './components/Login/index.jsx'
 import Signup from './components/Signup'
 import Login from './components/Login'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
+import { ToastContainer,toast,Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {Routes, Route } from 'react-router-dom'
+import JobItemDetails from './components/JobItemDetails'
+import NotFound from './components/NotFound'
 import Home from './components/Home'
-/*import Jobs from './components/Jobs/index.jsx'
-import Home from './components/Home/index.jsx'
-import ProtectedRoute from './components/ProtectedRoute/index.jsx'
-import JobItemDetails from './components/JobItemDetails/index.jsx'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Component } from 'react'
-import NotFound from './components/NotFound/index.jsx'*/
-
+import Jobs from './components/Jobs'
+import './App.css'
 const employmentTypesList = [
   {
     label: 'Full Time',
@@ -49,43 +47,36 @@ const salaryRangesList = [
   },
 ]
 
-/*class App extends Component {
-    render() {
-        return (
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-                    <Route
-      path="/jobs"
-      element={
-        <ProtectedRoute>
-          <Jobs
-            employmentTypesList={employmentTypesList}
-            salaryRangesList={salaryRangesList}
-          />
-        </ProtectedRoute>
-      }
-    />
-                    <Route exact path="/jobs/:id" element={<ProtectedRoute><JobItemDetails/></ProtectedRoute>}/>
-                    <Route exact path="/" element={<Signup />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </BrowserRouter>
-        )
-    }
-}*/
+
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <>
+    <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          theme="light"
+          transition={Bounce}
+          />
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<ProtectedRoute/>} />
+            <Route path='/home' element={<Home/>} />
+            <Route path='/jobs' element={<Jobs employmentTypesList={employmentTypesList} salaryRangesList={salaryRangesList} />} />
+            <Route path='/jobs/:id' element={<JobItemDetails/>} />
+        <Route/>
+        <Route path="*" element={<NotFound/>} />
       </Routes>
-    </BrowserRouter>
+    </>
   )
 }
+
 
 export default App

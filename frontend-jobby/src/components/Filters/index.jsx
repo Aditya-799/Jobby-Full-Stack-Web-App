@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import {useState} from 'react'
 import './index.css'
 
 const totalLabel = [
@@ -24,12 +24,12 @@ const totalLabel = [
   },
 ]
 
-class Filters extends Component {
-  state = {initial: totalLabel,salaryRange: ''}
+const Filters = (props) => {
+  const [initial, setInitial] = useState(totalLabel)
+  const [salaryRange, setSalaryRange] = useState('')
+  const {sendList,salaryChange} = props
 
-  filterlabel = label => {
-    const {initial} = this.state
-    const {sendList} = this.props
+  const filterlabel = label => {
     const updatedList = initial.map(eachItem => ({
       ...eachItem,
       isLabelPresent:
@@ -40,26 +40,26 @@ class Filters extends Component {
     const selectedIds = updatedList
       .filter(item => item.isLabelPresent)
       .map(item => item.employmentTypeId)
-    sendList(selectedIds.join(','))
-    this.setState({initial: updatedList})
+    sendList(selectedIds.join(',')) 
+    setInitial(updatedList)
   }
 
-  handleFilters=()=>{
-    const {sendList,salaryChange} = this.props
-    this.setState({initial: totalLabel,salaryRange: ''})
-    sendList('')
+  const handleFilters=()=>{
+    
     salaryChange('')
+    setInitial(totalLabel)
+    setSalaryRange('')
+    sendList('')
+    
   }
 
-  changedsalaryRange = salary => {
-    const {salaryChange} = this.props
-    this.setState({salaryRange: salary})
+  const changedsalaryRange = salary => {
+    setSalaryRange(salary)
     salaryChange(salary)
   }
 
-  render() {
-    const { salaryRangesList} = this.props
-    const {initial,salaryRange} = this.state
+  
+    const { salaryRangesList} = props
     return (
       <div className="filter-container">
         <hr className="line" />
@@ -74,7 +74,7 @@ class Filters extends Component {
                 <input type="checkbox" className="checkbox"
                  value={eachItem.employmentTypeId}
                  checked={eachItem.isLabelPresent}
-                 onChange={() => this.filterlabel(eachItem.employmentTypeId)}
+                 onChange={() => filterlabel(eachItem.employmentTypeId)}
                 />
               </button>
               <p className="job-type">{eachItem.label}</p>
@@ -92,16 +92,16 @@ class Filters extends Component {
                 name="salaryRangeButton"
                 value={eachItem.salaryRangeId}
                 checked={eachItem.salaryRangeId===salaryRange}
-                onChange={() => this.changedsalaryRange(eachItem.salaryRangeId)}
+                onChange={() => changedsalaryRange(eachItem.salaryRangeId)}
               />
               <p className="job-type">{eachItem.label}</p>
             </li>
           ))}
         </ul>
-        <button type="reset" className='clearFiltersButton' onClick={this.handleFilters}>Clear Filters</button>
+        <button type="reset" className='clearFiltersButton' onClick={handleFilters}>Clear Filters</button>
       </div>
     )
 }
-}
+
 
 export default Filters

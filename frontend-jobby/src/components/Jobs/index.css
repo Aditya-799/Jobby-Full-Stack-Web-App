@@ -4,6 +4,10 @@
     font-family: 'Roboto';
     box-sizing: border-box;
   }
+  .jobs-bg-container{
+    min-width: 100vw;
+    min-height: 99vh;
+  }
   .toe {
     display: none;
   }

@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import {useState,useEffect} from 'react'
 import {GridLoader} from 'react-spinners'
 import {BsSearch} from 'react-icons/bs'
 import Cookies from 'js-cookie'
@@ -9,26 +9,24 @@ import axios from 'axios'
 import Header from '../Header'
 import './index.css'
 
-class Jobs extends Component {
-  state = {
-    jobsList: [],
-    searchInput: '',
-    updatedList: [],
-    minimumPackage: '',
-    employmentType: '',
-    isLoading: true,
-    isFailure: false,
-  }
+const Jobs = (props) => {
+   const [isLoading,setIsLoading]=useState(true)
+   const [jobsList,setJobsList]=useState([])
+   const [searchInput,setSearchInput]=useState('')
+   const [minimumPackage,setMinimumPackage]=useState('')
+   const [employmentType,setEmploymentType]=useState('')
+   const [isFailure,setIsFailure]=useState(false)
+   const [updatedList,setUpdatedList]=useState([])
 
-  componentDidMount() {
-    this.getJobs()
-  }
+   useEffect(()=>{
+      getJobs()
+   },[])
 
-  changedInput = event => {
-    this.setState({searchInput: event.target.value})
-  }
+   const changedInput = event => {
+     setSearchInput(event.target.value)
+   }
 
-  convertTocamelCase = data => {
+  const convertTocamelCase = data => {
     const newData = data.map(eachItem => ({
       companyLogoUrl: eachItem.company_logo_url,
       employmentType: eachItem.jobType,
@@ -42,11 +40,24 @@ class Jobs extends Component {
       jobApplicants:eachItem.jobApplicants,
       status:eachItem.status
     }))
-    this.setState({jobsList: newData, isLoading: false})
+    setIsLoading(false)
+    setJobsList(newData)
+    setUpdatedList(newData)
+    
   }
 
-  getJobs = async () =>{
-    const {searchInput,minimumPackage,employmentType} = this.state
+  useEffect(()=>{
+    getJobs()
+  },[minimumPackage,employmentType])
+
+  const getUpdatedList = () => {
+    const filteredData = jobsList.filter(eachItem =>
+      eachItem.title.toLowerCase().includes(searchInput.toLowerCase()),
+    )
+    setUpdatedList(filteredData)
+  }
+
+ const getJobs = async () =>{
     const employementlist=employmentType.trim().split(',')
     const url = `http://localhost:8000/api/jobs/get/alljobs?search_q=${searchInput}&minimum_package=${minimumPackage}&employementType=${employementlist}`
     const jwtToken = Cookies.get('jwtToken')
@@ -58,38 +69,44 @@ class Jobs extends Component {
     })
     if(response.status===200 || response.statusText==='OK'){
       const {data}=response
-      this.convertTocamelCase(data)
+      convertTocamelCase(data)
     }
     else{
       console.log("error")
-      this.setState({isLoading:false,isFailure:true})
+      setIsLoading(false)
+      setIsFailure(true)
     }
   }
 
-  searched = event => {
+  const searched = event => {
     event.preventDefault()
-    this.getJobs()
+    getUpdatedList();
+    
   }
 
-  salaryChange = salary => {
-    this.setState({minimumPackage: salary}, this.getJobs)
+
+  const salaryChange = salary => {
+    setMinimumPackage(salary)
+  };
+  
+
+  const sendList = labelsList => {
+    setEmploymentType(labelsList)
   }
 
-  sendList = labelsList => {
-    this.setState({employmentType: labelsList}, this.getJobs)
-  }
-
-  renderLoader = () => (
+  const renderLoader = () => (
     <div className="loader-container" data-testid="loader">
       <GridLoader color="#ffffff" height="50" width="50" />
     </div>
   )
 
-  retryFetching = () => {
-    this.setState({isFailure: false, isLoading: true}, this.getJobs)
+  const retryFetching = () => {
+    setIsFailure(false)
+    setIsLoading(true)
+    getJobs()
   }
 
-  renderFailureView = () => (
+  const renderFailureView = () => (
     <div className="failure-view-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
@@ -98,13 +115,13 @@ class Jobs extends Component {
       />
       <h1>Oops! Something Went Wrong</h1>
       <p>We cannot seem to find the page you are looking for</p>
-      <button type="button" className="logout" onClick={this.retryFetching}>
+      <button type="button" className="logout" onClick={retryFetching}>
         Retry
       </button>
     </div>
   )
 
-  rendernotfoundJobs = () => (
+  const rendernotfoundJobs = () => (
     <div className="failure-view-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
@@ -116,13 +133,8 @@ class Jobs extends Component {
     </div>
   )
 
-  render() {
-    const {employmentTypesList=[], salaryRangesList=[]} = this.props
-    const {isLoading, isFailure, jobsList, updatedList, searchInput} =
-      this.state
+    const {employmentTypesList=[], salaryRangesList=[]} = props
     const newData = updatedList.length === 0 ? jobsList : updatedList
-    if (newData.length === 0) {
-    }
     return (
       <>
         <Header />
@@ -132,7 +144,7 @@ class Jobs extends Component {
               <input
                 type="search"
                 className="search-box"
-                onChange={this.changedInput}
+                onChange={changedInput}
                 value={searchInput}
                 placeholder="Search"
               />
@@ -141,7 +153,7 @@ class Jobs extends Component {
                   type="button"
                   data-testid="searchButton"
                   className="search-icon-button"
-                  onClick={this.searched}
+                  onClick={searched}
                 >
                   <BsSearch className="search-icon" />
                 </button>
@@ -153,8 +165,8 @@ class Jobs extends Component {
               <Filters
                 employmentTypesList={employmentTypesList}
                 salaryRangesList={salaryRangesList}
-                sendList={this.sendList}
-                salaryChange={this.salaryChange}
+                sendList={sendList}
+                salaryChange={salaryChange}
               />
               </div>
               </div>
@@ -167,7 +179,7 @@ class Jobs extends Component {
               <input
                 type="search"
                 className="search-box"
-                onChange={this.changedInput}
+                onChange={changedInput}
                 value={searchInput}
                 placeholder="Search"
               />
@@ -176,18 +188,18 @@ class Jobs extends Component {
                   type="button"
                   data-testid="searchButton"
                   className="search-icon-button"
-                  onClick={this.searched}
+                  onClick={searched}
                 >
                   <BsSearch className="search-icon" />
                 </button>
               </div>
             </div>
             {isFailure ? (
-              this.renderFailureView()
+              renderFailureView()
             ) : isLoading ? (
-              this.renderLoader()
+              renderLoader()
             ) : newData.length === 0 ? (
-              this.rendernotfoundJobs()
+              rendernotfoundJobs()
             ) : (
               <ul className="all-cards-container">
                 {newData.map(eachItem => (
@@ -201,6 +213,5 @@ class Jobs extends Component {
       </>
     )
   }
-}
 
 export default Jobs

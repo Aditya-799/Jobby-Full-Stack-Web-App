@@ -1,5 +1,6 @@
 import axios from "axios";
-import { ToastContainer,toast,Bounce } from "react-toastify";
+import {Navigate,useNavigate,Link} from 'react-router-dom'
+import {ToastContainer,toast,Bounce} from "react-toastify";
 import {useState} from 'react'
 import Cookies from "js-cookie";
 import './index.css';
@@ -9,7 +10,14 @@ const Login=()=>{
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
     const [role,setrole]=useState('recruiter')
-    const changedUsername = event => {
+    const navigate=useNavigate()
+
+    const jwtToken = Cookies.get('jwtToken')
+    if (jwtToken !== undefined) {
+      return <Navigate to="/home" replace/>
+    }
+
+    const changedEmail = event => {
     setEmail(event.target.value)
   }
 
@@ -17,9 +25,8 @@ const Login=()=>{
       setPassword(event.target.value)
   }
  const changeToHome = data => {
-    const { navigate } = this.props
     Cookies.set('jwtToken', data, {expires: 30})
-    navigate('/home', { replace: true })
+    navigate('/home',{replace:true})
   }
 
   const changedType = event => {
@@ -27,7 +34,6 @@ const Login=()=>{
     }
     const handleSubmit= async (e)=>{
         e.preventDefault()
-        const {email,password,role}=this.state
         try {
         const response = await axios.post(`http://localhost:8000/api/auth/login`, {
             email,
@@ -36,9 +42,9 @@ const Login=()=>{
         });
 
         if (response.status === 200 || response.status === 201) {
+          toast.success('Login successful')
             const { token } = response.data;
-            this.changeToHome(token)
-            toast.success('Login successful');
+            changeToHome(token)
         } else {
             toast.error('Login failed');
         }
@@ -54,11 +60,8 @@ const Login=()=>{
 }
         
     }
-    /*
-    const cookieval=Cookies.get('jwtToken')
-    if(cookieval!==undefined){
-        return <Navigate to='/home' replace/>
-    }*/
+    
+   
         return(
             <div className="bg-container">
         <div className="card-container">
@@ -76,7 +79,7 @@ const Login=()=>{
               className="username"
               id="Email"
               placeholder="Email"
-              onChange={changedUsername}
+              onChange={changedEmail}
               value={email}
             />
             <label htmlFor="Password" className="username-heading">
@@ -92,28 +95,21 @@ const Login=()=>{
             />
              <label htmlFor="typeOfLogin" className="username-heading">LogIn as</label>
             <select id="typeOfLogin" className="username" onChange={changedType} value={role}>
-              <option className="important" value="recruiter">recruiter</option>
-              <option className="important" value="user">user</option>
+              <option className="important styling" value="recruiter">recruiter</option>
+              <option className="important styling" value="user">user</option>
             </select>
             <button type="submit" className="login-button">
               Login
             </button>
             
           </form>
+          <p className="signup-link">Already have an account?
+          <Link to="/signup" className="link">
+             Sign up
+          </Link>
+          </p>
         </div>
-        <ToastContainer
-position="top-right"
-autoClose={3000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick={false}
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-transition={Bounce}
-/>
+        
       </div>
         )
     }

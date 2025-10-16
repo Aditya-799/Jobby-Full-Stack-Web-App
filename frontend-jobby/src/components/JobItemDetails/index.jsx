@@ -1,7 +1,8 @@
 import {MdLocationOn} from 'react-icons/md'
 import {FaSuitcase, FaStar, FaExternalLinkAlt,FaArrowLeft} from 'react-icons/fa'
+import {useState,useEffect} from 'react'
 import Cookies from 'js-cookie'
-import {useNavigate,useEffect,useState} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'  
 import SkillItem from '../SkillItem'
 import {GridLoader} from 'react-spinners'
 import axios from 'axios'
@@ -90,11 +91,11 @@ const JobItemDetails = () => {
     }
   }
 
-  const retryFetching = () => {
+  const retryFetching = async () => {
     /*this.setState({isFailure: false, isLoading: true}, this.getJobDetails)*/
     setIsFailure(false)
     setIsLoading(true)
-    getJobDetails()
+    await getJobDetails()
   }
 
   const renderFailureView = () => (
@@ -106,7 +107,7 @@ const JobItemDetails = () => {
       />
       <h1>Oops! Something Went Wrong</h1>
       <p>We cannot seem to find the page you are looking for</p>
-      <button type="button" className="logout" onClick={this.retryFetching}>
+      <button type="button" className="logout" onClick={retryFetching}>
         Retry
       </button>
     </div>
@@ -117,8 +118,7 @@ const JobItemDetails = () => {
       <GridLoader color="#ffffff" height="50" width="50" />
     </div>
   )
-  goBack = () => {
-    const navigate = useNavigate()
+  const goBack = () => {
     navigate('/jobs')
   }
 
@@ -139,7 +139,7 @@ const JobItemDetails = () => {
     return (
       <>
       <div className="arrow-container">
-        <button type="button" className="arrow-button" onClick={this.goBack}>
+        <button type="button" className="arrow-button" onClick={goBack}>
           <FaArrowLeft className="arrow-icon-jid" />
           </button>
       </div>
@@ -198,7 +198,7 @@ const JobItemDetails = () => {
                 <p className="job-desc-new">{lifeAtCompany}</p>
               </div>
               <div className="image-container">
-                <img src={`${process.env.PUBLIC_URL}/Assets/company-image.jpg`} alt="company" className="company-image" />
+                <img src={`/Assets/company-image.jpg`} alt="company" className="company-image" />
               </div>
             </div>
           </div>

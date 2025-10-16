@@ -29,7 +29,7 @@ const Signup = () => {
   const handleSubmit= async (e)=>{
         e.preventDefault()
         try {
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/auth/signup`, {
+        const response = await axios.post(`http://localhost:8000/api/auth/signup`, {
             fullName:username,
             email,
             password,
@@ -37,6 +37,7 @@ const Signup = () => {
         });
         if (response.status === 201 || response.status===200) {
             toast.success('Signup successful');
+            navigate('/login',{replace:true})
             localStorage.setItem('userName',JSON.stringify(username));
             localStorage.setItem('email',JSON.stringify(email))
         } else {
@@ -104,27 +105,15 @@ const Signup = () => {
             />
              <label htmlFor="signuptypeOfLogin" className="username-heading">LogIn as</label>
             <select id="signuptypeOfLogin" className="username" onChange={changedType} value={role}>
-              <option className="important" value="recruiter">recruiter</option>
-              <option className="important" value="user">user</option>
+              <option className="important styling" value="recruiter">recruiter</option>
+              <option className="important styling" value="user">user</option>
             </select>
             <button type="submit" className="login-button" >
               Sign up
             </button>
           </form>
           
-          <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          transition={Bounce}
-          />
+          
           <p className="signup-link">Already have an account?
           <Link to="/login" className="link">
              Login
