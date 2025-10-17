@@ -59,7 +59,7 @@ const Jobs = (props) => {
 
  const getJobs = async () =>{
     const employementlist=employmentType.trim().split(',')
-    const url = `http://localhost:8000/api/jobs/get/alljobs?search_q=${searchInput}&minimum_package=${minimumPackage}&employementType=${employementlist}`
+    const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/alljobs?search_q=${searchInput}&minimum_package=${minimumPackage}&employementType=${employementlist}`
     const jwtToken = Cookies.get('jwtToken')
     const response = await axios.get(url, {
       headers: {

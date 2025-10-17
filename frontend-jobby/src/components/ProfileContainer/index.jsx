@@ -13,7 +13,7 @@ class ProfileContainer extends Component {
 
   getProfiledetails = async () => {
     axios.get(
-      `http://localhost:8000/api/users/get/profile`,
+      `${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/get/profile`,
       {
         headers: {
           Authorization: `Bearer ${Cookies.get('jwtToken')}`,

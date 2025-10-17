@@ -29,7 +29,7 @@ const Signup = () => {
   const handleSubmit= async (e)=>{
         e.preventDefault()
         try {
-        const response = await axios.post(`http://localhost:8000/api/auth/signup`, {
+        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/signup`, {
             fullName:username,
             email,
             password,

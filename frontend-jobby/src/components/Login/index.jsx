@@ -3,8 +3,8 @@ import {Navigate,useNavigate,Link} from 'react-router-dom'
 import {ToastContainer,toast,Bounce} from "react-toastify";
 import {useState} from 'react'
 import Cookies from "js-cookie";
+import dotenv from 'dotenv'
 import './index.css';
-
 
 const Login=()=>{
     const [email,setEmail]=useState('')
@@ -35,7 +35,7 @@ const Login=()=>{
     const handleSubmit= async (e)=>{
         e.preventDefault()
         try {
-        const response = await axios.post(`http://localhost:8000/api/auth/login`, {
+        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/login`, {
             email,
             password,
             role,

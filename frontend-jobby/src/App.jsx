@@ -7,6 +7,7 @@ import {Routes, Route } from 'react-router-dom'
 import JobItemDetails from './components/JobItemDetails'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
+/*import ProfileSection from './components/ProfileSection'*/
 import Jobs from './components/Jobs'
 import './App.css'
 const employmentTypesList = [
@@ -77,6 +78,10 @@ const App = () => {
     </>
   )
 }
-
-
+  /*
+const App = () => (
+  <>
+  <ProfileSection/>
+  </>
+)*/
 export default App
