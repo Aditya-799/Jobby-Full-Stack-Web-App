@@ -41,10 +41,13 @@ export const getAllJobs = async (req, res) => {
 
 export const addJobs=async(req,res)=>{
     try {
-        const {title,description,location,salary,requirements,jobType,status}=req.body
-        if(!title || !description || !location || !salary || !requirements || !jobType || !status){
+        const { title,job_description,location,salary,requirements,jobType,status,company_name}=req.body
+        if(!title || !job_description || !location || !salary || !requirements || !jobType || !status || !company_name){
             return res.status(400).json({message:"All fields are required"})
         }
+        const words=job_description.split(',')
+        let description=words.slice(0,21).join(',')
+        
         const jobs=await Job.find({title:title})
         const ispostedbysameuser=jobs.find(job=>job.user.toString()===req.user._id.toString())
         if(ispostedbysameuser){
@@ -54,9 +57,11 @@ export const addJobs=async(req,res)=>{
             user:req.user._id,
             title,
             description,
+            job_description,
             location,
             salary,
             requirements,
+            company_name,
             jobType,status})
         res.status(201).json(job)
     } catch (error) {

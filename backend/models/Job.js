@@ -30,7 +30,7 @@ const jobSchema = new mongoose.Schema({
   },
   company_logo_url: {
     type: String,
-    required: true
+    required: false
   },
   company_name: {
     type: String,
@@ -52,11 +52,11 @@ const jobSchema = new mongoose.Schema({
   },
   life_at_company:{
     type:String,
-    required: true
+    required: false
   },
   website_url:{
     type:String,
-    required:true
+    required:false
   },
   jobApplicants:[{
     type:mongoose.Schema.Types.ObjectId,

@@ -40,15 +40,24 @@ const Login=()=>{
             password,
             role,
         });
+        if(response.data.user.role !== role){
+            toast.error(`No ${role} found with this credentials`)
+            return
+        }
+        if(response.data.user.role==='recruiter'){
+          window.location.href='http://localhost:5173/'
+        }
 
         if (response.status === 200 || response.status === 201) {
           toast.success('Login successful')
             const { token } = response.data;
+            if(token){
             changeToHome(token)
         } else {
             toast.error('Login failed');
         }
-    } catch (error) {
+    } 
+  }catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
         console.error('Error:', error.response.data.message);
         toast.error(error.response.data.message);
