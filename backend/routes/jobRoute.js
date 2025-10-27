@@ -1,7 +1,7 @@
 import express from "express"
 import {protectRoute } from "../middleware/authMiddleware.js"
 import checkRecruiter from "../middleware/checkrecruiter.js"
-import {getAllJobs,addJobs,getJobById,deleteJob,updateJob,getApplicants} from "../controllers/jobController.js"
+import {getAllJobs,addJobs,getJobById,deleteJob,updateJob,getApplicants,getJobspostedByrecruiter} from "../controllers/jobController.js"
 
 const router=express.Router()
 
@@ -14,6 +14,8 @@ router.use(protectRoute)
 router.get('/get/job/:id',getJobById)
 
 //admin specific operations
+
+router.get('/get/jobspostedbyrecruiter',checkRecruiter,getJobspostedByrecruiter)
 
 router.post('/createjob',checkRecruiter,addJobs)
 

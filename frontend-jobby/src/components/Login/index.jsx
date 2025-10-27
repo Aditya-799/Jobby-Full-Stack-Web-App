@@ -34,17 +34,16 @@ const Login=()=>{
     }
     const handleSubmit= async (e)=>{
         e.preventDefault()
+        console.log(role)
         try {
         const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/login`, {
             email,
             password,
             role,
         });
-        if(response.data.user.role !== role){
-            toast.error(`No ${role} found with this credentials`)
-            return
-        }
-        if(response.data.user.role==='recruiter'){
+        console.log(response)
+        if(role==='recruiter'){
+if(response.data.recruiter.role==='recruiter'){
           window.location.href='http://localhost:5173/'
         }
 
@@ -57,6 +56,8 @@ const Login=()=>{
             toast.error('Login failed');
         }
     } 
+        }
+        
   }catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
         console.error('Error:', error.response.data.message);

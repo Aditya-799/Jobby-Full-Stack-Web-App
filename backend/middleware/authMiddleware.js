@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/Users.js';
 import dotenv from 'dotenv';
+import Recruiter from '../models/recruiters.js';
 dotenv.config();
 
 export const protectRoute = async (req, res, next) => {
     try{
         // Get token from cookies OR Authorization header
         let token = req.cookies.jwt;
-        
         // If no cookie, check Authorization header
         if (!token && req.headers.authorization) {
             token = req.headers.authorization.replace('Bearer ', '');
@@ -23,14 +23,32 @@ export const protectRoute = async (req, res, next) => {
         if(!decoded){
             return res.status(401).json({message:"Invalid token"})
         }
-        
+
+        if(decoded.recruiterId){
+
+        const recruiter=await Recruiter.findById(decoded.recruiterId).select('-password')
+        if(!recruiter){
+            return res.status(404).json({message:"Recruiter not found"})
+        }
+        else{
+            console.log(recruiter)
+            req.recruiter=recruiter
+        }
+        next()
+    }
+    else{
+
         const user = await User.findById(decoded.userId).select("-password")
         if(!user){
             return res.status(404).json({message:"User not found"})
         }
+        else{
+             req.user = user
+        }
         
-        req.user = user
+       
         next()
+    }
     }
     catch(error){
         console.error("Error in protectRoute middleware:", error);

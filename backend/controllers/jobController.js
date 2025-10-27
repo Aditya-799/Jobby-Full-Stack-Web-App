@@ -1,5 +1,7 @@
+import e from "express";
 import Job from "../models/Job.js"
 import User from "../models/Users.js"
+import Recruiter from '../models/recruiters.js'
 
 
 export const getAllJobs = async (req, res) => {
@@ -47,14 +49,18 @@ export const addJobs=async(req,res)=>{
         }
         const words=job_description.split(',')
         let description=words.slice(0,21).join(',')
+
+        //To check whether the two jobs are posted with same title
         
-        const jobs=await Job.find({title:title})
-        const ispostedbysameuser=jobs.find(job=>job.user.toString()===req.user._id.toString())
+        /*const jobs=await Job.find({title:title})
+        const ispostedbysameuser=jobs.find(job=>job.recruiter.toString()===req.recruiter._id.toString())
         if(ispostedbysameuser){
             return res.status(400).json({message:"You have already posted a job with this title"})
         }
+        else{
+        */
         const job=await Job.create({
-            user:req.user._id,
+            recruiter:req.recruiter._id,
             title,
             description,
             job_description,
@@ -63,7 +69,17 @@ export const addJobs=async(req,res)=>{
             requirements,
             company_name,
             jobType,status})
+        
+        
+        const recruiter=await Recruiter.findById(req.recruiter._id)
+        if(recruiter){
+            console.log('pushing the data into the jobs posted by recruiter')
+            recruiter.Jobsposted.push(job._id)
+            await recruiter.save()
+        }
+        
         res.status(201).json(job)
+    
     } catch (error) {
         res.status(500).json({message:error.message})
     }
@@ -123,6 +139,25 @@ export const getApplicants=async(req,res)=>{
     }
     catch(error){
         console.log("Internal server error")
+        res.status(500).json({message:error.message})
+    }
+}
+
+
+
+export const getJobspostedByrecruiter=async (req,res)=>{
+    try{
+        const recruiter=await Recruiter.findById(req.recruiter._id)
+        const jobsArray=recruiter.Jobsposted
+        const jobs=await Job.find({_id:{$in:jobsArray}})
+        const newarray=[]
+        for(let each of jobs){
+        newarray.push({id:each._id,jobtitle:each.title,jobtype:each.jobType,date:each.createdAt,status:each.status,applicantnumber:each.jobApplicants.length})
+        }
+        res.status(200).json(newarray)
+    }
+    catch(error){
+        console.log('Error fetching the jobs posted by recruiter')
         res.status(500).json({message:error.message})
     }
 }

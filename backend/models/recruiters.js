@@ -71,7 +71,14 @@ const RecruiterSchema = new mongoose.Schema({
     isProfileComplete: {
         type: Boolean,
         default: true,
-    }
+    },
+    Jobsposted:[ //It stores the Jobs object id so that we can get all the details and populate it with in the controller
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Job',
+            required: false
+        }
+    ]
 }, {
     timestamps: true // Adds 'createdAt' and 'updatedAt' fields automatically
 });
