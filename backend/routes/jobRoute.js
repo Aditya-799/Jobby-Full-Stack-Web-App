@@ -10,12 +10,15 @@ router.get('/get/alljobs',getAllJobs)
 router.use(protectRoute)
 
 
+router.get('/get/jobdetails/:id',getJobById)
 
-router.get('/get/job/:id',getJobById)
+
 
 //admin specific operations
 
 router.get('/get/jobspostedbyrecruiter',checkRecruiter,getJobspostedByrecruiter)
+
+router.get('/get/job/:id',checkRecruiter,getJobById)
 
 router.post('/createjob',checkRecruiter,addJobs)
 

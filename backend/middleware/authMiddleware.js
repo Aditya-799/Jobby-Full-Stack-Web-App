@@ -9,6 +9,7 @@ export const protectRoute = async (req, res, next) => {
         // Get token from cookies OR Authorization header
         let token = req.cookies.jwt;
         // If no cookie, check Authorization header
+        console.log(req.headers.authorization)
         if (!token && req.headers.authorization) {
             token = req.headers.authorization.replace('Bearer ', '');
         }

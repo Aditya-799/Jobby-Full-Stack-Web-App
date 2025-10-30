@@ -5,14 +5,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ToastContainer,toast,Bounce } from "react-toastify";
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import './index.css';
 
 
 
-export default function FormDialog({open,handleClose}) {
+export default function FormDialog({open,handleClose,dialog,data}) {
  
 const [formData,setformData]=useState({
   position:'',
@@ -22,8 +22,56 @@ const [formData,setformData]=useState({
   salary:'',
   skills:'',
   jobType:'Full-time',
-  status:'Open'
+  status:'Open',
+  jobId:''
+  
 })
+
+useEffect(()=>{
+  if(data){
+    setformData({company_name:data.company_name,
+    position:data.title,
+    location:data.location,
+    description:data.job_description,
+    salary:data.salary,
+    skills:data.requirements,
+    jobType:data.jobType,
+    status:data.status,
+    jobId:data._id})
+  }
+},[data])
+
+const handleUpdate= async (jobId)=>{
+  try{
+    if(jobId===undefined || jobId===null || jobId===''){
+      return
+    }
+    else{  
+    const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/update/job/${jobId}`
+    const headers={
+      "Content-Type":"application/json",
+      'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+    }
+    const data={
+      company_name:formData.company_name,
+      title:formData.position,
+      location:formData.location,
+      job_description:formData.description,
+      salary:formData.salary,
+      jobType:formData.jobType,
+      status:formData.status,
+      requirements:formData.skills,
+      jobId:formData.jobId
+    }
+    const response=await axios.put(url,data,{headers})
+    window.location.reload()
+    handleClose()
+  }
+  }
+  catch(error){
+    toast.error(error.message)
+  }
+}
 
 
   const handleSubmit = async (event) => {
@@ -126,9 +174,14 @@ const [formData,setformData]=useState({
         </DialogContent>
         <DialogActions>
           <button onClick={handleClose} className='login-button'>Cancel</button>
-          <button type="submit" form="subscription-form" className="login-button">
+          {dialog === "create" &&<button type="submit" form="subscription-form" className="login-button">
             Post
+          </button>}
+          {
+            dialog==="edit" && <button type="button" className="login-button" onClick={()=>handleUpdate(formData.jobId)}>
+            Update
           </button>
+          }
         </DialogActions>
         </div>
       </Dialog>

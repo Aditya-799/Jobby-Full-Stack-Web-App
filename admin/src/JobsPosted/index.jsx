@@ -13,6 +13,8 @@ const {jobType, changeType} = props;
 const [formOpen, setFormOpen] = useState(false);
 const [editOpen, setEditOpen] = useState(false);
 const [jobsData, setJobsData] = useState([]);
+const [dataFetched, setDataFetched] = useState(null);
+
 
 const handleFormOpen = () => {
         setFormOpen(true);
@@ -21,8 +23,21 @@ const handleFormClose = () => {
     setFormOpen(false);
 };
 
-const handleEditOpen = () => {
-  setEditOpen(true);
+const handleEditOpen = async (jobId) => {
+    try{
+        const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/job/${jobId}`
+        const headers={
+            "Content-type":"application/json",
+            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        }
+        const job=await axios.get(url,{headers})   
+        setDataFetched(job.data)
+        setEditOpen(true);
+    }
+    catch(error){
+        
+    }
+  
 };
 const handleEditClose = () => {
   setEditOpen(false);
@@ -54,6 +69,7 @@ const deleteJob= async (jobId)=>{
       }
     }
 }
+
 
 
 useEffect(() => {
@@ -92,6 +108,8 @@ return (
                         <FormDialog 
                             open={formOpen}
                             handleClose={handleFormClose}
+                            dialog="create"
+                            data={dataFetched}
                         />
                     )}
                         </div>
@@ -114,12 +132,13 @@ return (
                                         <td className="table-heading data">{job.status}</td>
                                         <td className="table-heading data">{job.applicantnumber}</td>
                                         <td className="table-heading data"><Trash size={20} className="asc-icons" onClick={() =>deleteJob(job.id)}/>
-                                        <SquarePen size={20} className="asc-icons" onClick={handleEditOpen}/></td>
+                                        <SquarePen size={20} className="asc-icons" onClick={()=>handleEditOpen(job.id)}/></td>
                                         {editOpen && (
                         <FormDialog 
                             open={editOpen}
                             handleClose={handleEditClose}
-                        />
+                            dialog="edit"
+                            data={dataFetched}                        />
                     )}
 
                                     </tr>

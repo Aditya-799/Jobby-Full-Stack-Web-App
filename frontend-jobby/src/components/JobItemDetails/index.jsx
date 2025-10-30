@@ -51,7 +51,7 @@ const JobItemDetails = () => {
     // Alternative method: extract ID from URL directly
     const pathParts = window.location.pathname.split('/')
     const jobId = pathParts[pathParts.length - 1]
-    const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/job/${jobId}`
+    const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/jobdetails/${jobId}`
     const jwtToken = Cookies.get('jwtToken')
     const response = await axios(url, {
       headers: {
@@ -62,7 +62,6 @@ const JobItemDetails = () => {
     if(response.status===200 || response.statusText==='OK'){
       const {data}=response
       const jsonData=data 
-      setIsLoading(false)
       const updatedData = {
         companyLogoUrl: jsonData.company_logo_url,
         companyWebsiteUrl: jsonData.website_url,
