@@ -51,6 +51,7 @@ const [formData,setformData]=useState({
     if (response.status === 201 || response.status === 200) {
       toast.success('Job created successfully');
       handleClose();
+      window.location.reload();
     } else {
       toast.error('Job creation failed');
     }

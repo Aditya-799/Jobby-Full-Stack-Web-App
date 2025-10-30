@@ -59,6 +59,9 @@
     color: white;
     font-size: 20px;
   }
+  .full-screen{
+    min-width:100vw;
+  }
   
   @media (min-width: 767px) {
     .jid-inner-container {

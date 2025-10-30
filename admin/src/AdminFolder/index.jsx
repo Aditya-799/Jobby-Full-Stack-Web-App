@@ -2,6 +2,7 @@ import {useState} from 'react'
 import JobsPosted from '../JobsPosted'
 import ApplicationsTab from '../ApplicationsTab'
 import RecruiterForm from '../RecruiterForm'
+import SettingsTab from '../Settings'
 import FormDialog from '../Modal';
 import {  Settings, Briefcase, GraduationCap, FileText,Search, Plus,User} from 'lucide-react';
     import './index.css'
@@ -65,6 +66,7 @@ import {  Settings, Briefcase, GraduationCap, FileText,Search, Plus,User} from '
                      {activeOption==="Jobs" && <JobsPosted jobType={jobType} changeType={changeType}/>}
                      {activeOption==="Applications" && <ApplicationsTab jobType={jobType} changeType={changeType}/>}
                     {activeOption==="Profile" && <RecruiterForm/>}
+                    {activeOption==="Settings" && <SettingsTab/>}
 
                 </div>
             )

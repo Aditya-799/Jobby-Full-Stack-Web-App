@@ -5,6 +5,7 @@ import axios from "axios"
 import Cookies from 'js-cookie'
 import './index.css';
 import FormDialog from '../Modal';
+import { toast } from 'react-toastify';
 
 
 const JobsPosted=(props)=> {
@@ -26,6 +27,33 @@ const handleEditOpen = () => {
 const handleEditClose = () => {
   setEditOpen(false);
 };
+
+const deleteJob= async (jobId)=>{  
+    try{
+    const headers={
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+    }
+    const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/delete/job/${jobId}`
+    const response=await axios.delete(url,{headers})
+    if(response.status===200 || response.statusText==='OK'){
+        toast.success('Job Deleted Successfully')
+        window.location.reload()
+    }
+    else{
+        toast.error('Job Deletion Failed')
+    }
+    }
+    catch(error){
+      if (error.response && error.response.data && error.response.data.message) {
+        console.error('Error:', error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error('Error:', error.message || error);
+        toast.error('An unexpected error occurred.');
+      }
+    }
+}
 
 
 useEffect(() => {
@@ -85,7 +113,7 @@ return (
                                         <td className="table-heading data">{job.date}</td>
                                         <td className="table-heading data">{job.status}</td>
                                         <td className="table-heading data">{job.applicantnumber}</td>
-                                        <td className="table-heading data"><Trash size={20} className="asc-icons"/>
+                                        <td className="table-heading data"><Trash size={20} className="asc-icons" onClick={() =>deleteJob(job.id)}/>
                                         <SquarePen size={20} className="asc-icons" onClick={handleEditOpen}/></td>
                                         {editOpen && (
                         <FormDialog 

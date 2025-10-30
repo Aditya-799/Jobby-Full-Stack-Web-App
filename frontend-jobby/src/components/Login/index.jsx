@@ -43,22 +43,23 @@ const Login=()=>{
         });
         console.log(response)
         if(role==='recruiter'){
-if(response.data.recruiter.role==='recruiter'){
+            if(response.data.recruiter.role==='recruiter'){
           window.location.href='http://localhost:5173/'
         }
+      }
 
         if (response.status === 200 || response.status === 201) {
           toast.success('Login successful')
             const { token } = response.data;
             if(token){
             changeToHome(token)
-        } else {
+        } 
+      }
+      else {
             toast.error('Login failed');
         }
     } 
-        }
-        
-  }catch (error) {
+      catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
         console.error('Error:', error.response.data.message);
         toast.error(error.response.data.message);
