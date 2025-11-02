@@ -1,0 +1,36 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.applied-jobs-bg-container{
+    background-color: #000000;
+    min-height: 90vh;
+    padding:20px;
+    width:99vw;
+}
+.applied-jobs-heading{
+    color:white;
+    font-size:30px;
+    padding-top:20px;
+}
+.applied-job-outer-container{
+    display:flex;
+    justify-content:center;
+    width:100%;
+}
+.applied-job-container{
+    background-color:#111827;
+    padding:10px;
+    margin:20px;
+    border-radius:10px;
+    width:80vw;
+    color:white;
+}
+.company-details{
+    display:flex;
+}
+.company-details-inner-container{
+    display:flex;
+    width:100%;
+}

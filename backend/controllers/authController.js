@@ -35,7 +35,7 @@ export async function signup(req, res) {
           role,
           profilePic:randomAvatar,
         })
-        const token=jwt.sign({recruiterId:newRecruiter._id},process.env.JWT_SECRET,{expiresIn:'7d'})
+        const token=jwt.sign({recruiterId:newRecruiter._id,role:'recruiter'},process.env.JWT_SECRET,{expiresIn:'7d'})
         res.cookie("jwt",token,{
           maxAge: 7 * 24 * 60 * 60 * 1000,
           httpOnly: true,
@@ -62,7 +62,7 @@ export async function signup(req, res) {
       profilePic:randomAvatar,
     })
   
-    const token=jwt.sign({userId:newUser._id},process.env.JWT_SECRET,{expiresIn:'7d'})
+    const token=jwt.sign({userId:newUser._id,role:'user'},process.env.JWT_SECRET,{expiresIn:'7d'})
   
     res.cookie("jwt",token,{
       maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -94,7 +94,7 @@ export async function signup(req, res) {
         if(!ispasswordValid){
           return res.status(401).json({message:"Invalid Email or Password"})
         }
-        const token=jwt.sign({recruiterId:recruiter._id},process.env.JWT_SECRET,{expiresIn:'7d'})
+        const token=jwt.sign({recruiterId:recruiter._id,role:'recruiter'},process.env.JWT_SECRET,{expiresIn:'7d'})
   
         res.cookie("jwt",token,{
           maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -117,7 +117,7 @@ export async function signup(req, res) {
       if(!isRolevalid){
         return res.status(401).json({message:"Invalid role selected"})
       }
-      const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'7d'})
+      const token=jwt.sign({userId:user._id,role:'user'},process.env.JWT_SECRET,{expiresIn:'7d'})
   
     res.cookie("jwt",token,{
       maxAge: 7 * 24 * 60 * 60 * 1000,

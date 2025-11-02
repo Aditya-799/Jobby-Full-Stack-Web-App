@@ -10,7 +10,12 @@ const userSchema = new mongoose.Schema({
     skills: { type: [String], required: false },
     profilePic: { type: String, required: true },
     resume: { type: String, default: null },
-    resumePath: { type: String, default: null }
+    resumePath: { type: String, default: null },
+    Appliedjobs:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Job',
+        required:false
+    }]
 }, { timestamps: true })
 
 const User = mongoose.model('User', userSchema)

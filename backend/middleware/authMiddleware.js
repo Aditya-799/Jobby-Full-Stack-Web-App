@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { decode } from 'jsonwebtoken';
 import User from '../models/Users.js';
 import dotenv from 'dotenv';
 import Recruiter from '../models/recruiters.js';
@@ -25,7 +25,7 @@ export const protectRoute = async (req, res, next) => {
             return res.status(401).json({message:"Invalid token"})
         }
 
-        if(decoded.recruiterId){
+        if(decoded.role==="recruiter"){
 
         const recruiter=await Recruiter.findById(decoded.recruiterId).select('-password')
         if(!recruiter){
@@ -35,7 +35,6 @@ export const protectRoute = async (req, res, next) => {
             console.log(recruiter)
             req.recruiter=recruiter
         }
-        next()
     }
     else{
 
@@ -46,10 +45,8 @@ export const protectRoute = async (req, res, next) => {
         else{
              req.user = user
         }
-        
-       
-        next()
     }
+    next()
     }
     catch(error){
         console.error("Error in protectRoute middleware:", error);

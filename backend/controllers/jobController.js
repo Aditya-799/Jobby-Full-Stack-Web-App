@@ -39,8 +39,6 @@ export const getAllJobs = async (req, res) => {
       res.status(500).json({ message: 'An unexpected error occurred.' });
     }
   };
-
-
 export const addJobs=async(req,res)=>{
     try {
         const { title,job_description,location,salary,requirements,jobType,status,company_name}=req.body
@@ -99,6 +97,7 @@ export const deleteJob=async (req,res)=>{
     try{
         const jobId=req.params.id
         await Job.findByIdAndDelete(jobId)
+        await Recruiter.updateOne({_id:req.recruiter._id},{$pull:{Jobsposted:jobId}})
         res.status(200).json({message:"Job deleted successfully"})
     }
     catch(error){
@@ -148,8 +147,6 @@ export const getApplicants=async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 }
-
-
 
 export const getJobspostedByrecruiter=async (req,res)=>{
     try{

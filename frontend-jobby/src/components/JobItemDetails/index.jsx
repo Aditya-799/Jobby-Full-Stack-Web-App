@@ -1,5 +1,6 @@
 import {MdLocationOn} from 'react-icons/md'
 import {FaSuitcase, FaStar, FaExternalLinkAlt,FaArrowLeft} from 'react-icons/fa'
+import {toast} from 'react-toastify'
 import {useState,useEffect} from 'react'
 import Cookies from 'js-cookie'
 import {useNavigate} from 'react-router-dom'  
@@ -96,6 +97,31 @@ const JobItemDetails = () => {
     await getJobDetails()
   }
 
+  const ApplyJob=async ()=>{
+    try{
+      const pathParts = window.location.pathname.split('/')
+    const jobId = pathParts[pathParts.length - 1]
+    const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/apply-job/${jobId}`
+    const jwtToken = Cookies.get('jwtToken')
+    const response = await axios.post(url,{}, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+        'Content-Type':'application/json'
+      },
+    })
+    if(response.status===200 || response.statusText==='OK'){
+      toast.success("Job Applied Successfully")
+    }
+    else{
+      toast.error("Job Not Applied")
+    }
+    }
+    catch(error){
+      console.error(error)
+      toast.error("Job Application Failed")
+    }
+  }
+
   const renderFailureView = () => (
     <div className="failure-view-container">
       <img
@@ -176,7 +202,7 @@ const JobItemDetails = () => {
           <div className="card-bottom-section">
             <div className="description-container">
               <h1 className="jid-job-name">Description</h1>
-              <button className='logout-button'>Apply</button>
+              <button className='logout-button' onClick={ApplyJob}>Apply</button>
             </div>
             <p className="job-desc desc-container job-desc-new">{jobDescription}</p>
             <h1 className="jid-job-name">Skills</h1>

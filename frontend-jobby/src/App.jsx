@@ -5,8 +5,10 @@ import { ToastContainer,toast,Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {Routes, Route } from 'react-router-dom'
 import JobItemDetails from './components/JobItemDetails'
+import ProfileSection from './components/ProfileSection'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
+import AppliedJobsSection from './components/AppliedJobsSection'
 /*import ProfileSection from './components/ProfileSection'*/
 import Jobs from './components/Jobs'
 import './App.css'
@@ -49,7 +51,6 @@ const salaryRangesList = [
 ]
 
 
-
 const App = () => {
   return (
     <>
@@ -72,6 +73,8 @@ const App = () => {
             <Route path='/home' element={<Home/>} />
             <Route path='/jobs' element={<Jobs employmentTypesList={employmentTypesList} salaryRangesList={salaryRangesList} />} />
             <Route path='/jobs/:id' element={<JobItemDetails/>} />
+            <Route path='/profile/section' element={<ProfileSection/>} />
+            <Route path='/jobs/applied' element={<AppliedJobsSection/>} />
         <Route/>
         <Route path="*" element={<NotFound/>} />
       </Routes>
@@ -79,9 +82,9 @@ const App = () => {
   )
 }
   /*
-const App = () => (
-  <>
-  <ProfileSection/>
-  </>
-)*/
+ const App=()=>{
+  return (
+    <ProfileContainer/>
+  )
+ }*/
 export default App

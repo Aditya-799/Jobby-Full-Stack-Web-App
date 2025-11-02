@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import Header from '../Header'
 import './index.css'
 const ProfileSection = () => {
     const [file, setFile] = useState(null);
@@ -52,7 +52,9 @@ const ProfileSection = () => {
     else alert("Please select a file first.");
   };
     return(
-        <div className='profile-section-container'>
+      <>
+        <Header />
+        <div className='profile-section-container jid-bg-container'>
             <input type="text" className='profile-input' placeholder='Full Name'/>
             <textarea className='profile-input' placeholder='Bio'></textarea>
             <input type="text" className='profile-input' placeholder='Phone Number'/>
@@ -79,6 +81,7 @@ const ProfileSection = () => {
             <button type='button' className='profile-save-btn'>Save</button>
 
         </div>
+        </>
     )
 }
 
