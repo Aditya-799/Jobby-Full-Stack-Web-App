@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
     profilePic: { type: String, required: true },
     resume: { type: String, default: null },
     resumePath: { type: String, default: null },
+    isProfileComplete: { type: Boolean, default: false },
+    phone: { type: String, required: false },
     Appliedjobs:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Job',

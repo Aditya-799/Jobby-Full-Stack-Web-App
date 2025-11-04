@@ -1,7 +1,35 @@
-import {Plus, Search} from 'lucide-react';
+import {Plus, Search,Check,X} from 'lucide-react';
+import {useEffect,useState} from 'react'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import './index.css'
 
 const ApplicationsTab=(props)=> {
 const {jobType, changeType} = props;
+const [applicantsData, setApplicantsData] = useState([]);
+
+const getAllJobs=async()=>{
+    try{
+        const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/allapplicants`
+        const headers={
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        }
+        const response=await axios.get(url,{headers})
+        const data=response.data
+        console.log(data)
+        setApplicantsData(data)
+    }
+    catch(error){
+        console.error(error)
+    }
+
+}
+
+useEffect(()=>{
+getAllJobs()
+},[])
+
 return (
     <div className="as-content">
                     <>
@@ -28,19 +56,28 @@ return (
                                     <th className="table-heading">Match Score</th>
                                     <th className="table-heading">Actions</th>
                                 </tr>
-
-                                <tr className="table-line">
+                                {
+                                applicantsData.map((each)=>(
+                                    <tr className="table-line" key={each.id}>
                                     <td className="table-heading title">
                                         <div className="role-container">
-                                            <p className="role">Senoier Developer</p>
-                                            <p className="asc-description">Remote</p>
+                                            <p className="role">{each.name}</p>
+                                            <p className="asc-description">{each.email}</p>
                                         </div></td>
-                                    <td className="table-heading data">Type</td>
-                                    <td className="table-heading data">Tech Tantra</td>
-                                    <td className="table-heading data">Date</td>
+
+                                    <td className="table-heading data"><div className="role-container">
+                                            <p className="role">{each.jobtitle}</p>
+                                            <p className="asc-description">{each.jobtype}</p>
+                                        </div></td>
+                                    <td className="table-heading data">Active</td>
                                     <td className="table-heading data">Applications</td>
-                                    <td className="table-heading data">Actions</td>
+                                    <td className="table-heading data"><div className="">
+                                        <Check className="check-icon" />
+                                        <X className="cross-icon" />
+                                        </div></td>
                                 </tr>
+                                ))
+                                }
                                 </tbody>
                             </table>
                         </div>

@@ -4,7 +4,7 @@ import ApplicationsTab from '../ApplicationsTab'
 import RecruiterForm from '../RecruiterForm'
 import SettingsTab from '../Settings'
 import FormDialog from '../Modal';
-import {  Settings, Briefcase, GraduationCap, FileText,Search, Plus,User} from 'lucide-react';
+import {  Settings, Briefcase, FileText,Search, Plus,User} from 'lucide-react';
     import './index.css'
 
     const AdminFolder=()=> {
@@ -43,10 +43,6 @@ import {  Settings, Briefcase, GraduationCap, FileText,Search, Plus,User} from '
                             <li className={`as-sidebar-items ${activeOption==="Jobs"? "active":""}`} onClick={Jobs}>
                                 <Briefcase className="as-icons"/>
                                 <p className="as-sideheading">Jobs</p>
-                            </li>
-                            <li className={`as-sidebar-items ${activeOption==="Internships"? "active":""}`} onClick={Internships}>
-                                <GraduationCap className="as-icons"/> 
-                                <p className="as-sideheading">Internships</p>
                             </li>
                             <li className={`as-sidebar-items ${activeOption==="Applications"? "active":""}`} onClick={Applications}>
                                 <FileText className="as-icons"/> 

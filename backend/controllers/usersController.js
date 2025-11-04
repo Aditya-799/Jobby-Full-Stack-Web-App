@@ -21,7 +21,7 @@ export const getUserProfile = async (req, res) => {
 
 export const updateProfile=async (req,res)=>{
     try{
-        const {email,bio,skills}=req.body
+        const {fullName,email,bio,skills,phone}=req.body
         const allowedFields=['email','bio','skills']
         const updateData={}
         for(const field in req.body){

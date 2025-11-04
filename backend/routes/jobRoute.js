@@ -1,7 +1,7 @@
 import express from "express"
 import {protectRoute } from "../middleware/authMiddleware.js"
 import checkRecruiter from "../middleware/checkrecruiter.js"
-import {getAllJobs,addJobs,getJobById,deleteJob,updateJob,getApplicants,getJobspostedByrecruiter} from "../controllers/jobController.js"
+import {getAllJobs,addJobs,getJobById,deleteJob,updateJob,getApplicants,getJobspostedByrecruiter,getallApplicants} from "../controllers/jobController.js"
 
 const router=express.Router()
 
@@ -25,6 +25,8 @@ router.post('/createjob',checkRecruiter,addJobs)
 router.put('/update/job/:id',checkRecruiter,updateJob)
 
 router.delete('/delete/job/:id',checkRecruiter,deleteJob)
+
+router.get('/get/allapplicants',checkRecruiter,getallApplicants)
 
 router.get('/:id/applicants',checkRecruiter,getApplicants)
 

@@ -1,3 +1,44 @@
 .profile-section-container{
     width:100vw;
+     padding-bottom: 20px;
+    background-color: #000000;
+    padding:30px;
+    align-items:center;
+}
+.profile-heading{
+    font-size:34px;
+    margin-bottom:20px;
+}
+.profile-form{
+    display:flex;
+    flex-direction:column;
+    min-width:100%;
+    max-width:700px;
+}
+.profile-label{
+    font-size: 12px;
+    color: #f8fafc;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+.profile-input{
+    padding: 8px;
+    width: 100%;
+    max-width:700px;
+    height: 40px;
+    background-color: transparent;
+    outline: none;
+    border: 1px solid #64748b;
+    border-radius: 4px;
+    color: #f8fafc;
+}
+.profile-text-input{
+    padding: 8px;
+    width: 100%;
+    max-width:700px;
+    background-color: transparent;
+    outline: none;
+    border: 1px solid #64748b;
+    border-radius: 4px;
+    color: #f8fafc;
 }

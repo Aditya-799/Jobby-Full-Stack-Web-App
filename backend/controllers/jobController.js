@@ -1,9 +1,8 @@
-import e from "express";
 import Job from "../models/Job.js"
 import User from "../models/Users.js"
 import Recruiter from '../models/recruiters.js'
 
-
+//Doubt mongo query
 export const getAllJobs = async (req, res) => {
     try {
       const { search_q='', minimum_package=0,employementType} = req.query;
@@ -39,6 +38,9 @@ export const getAllJobs = async (req, res) => {
       res.status(500).json({ message: 'An unexpected error occurred.' });
     }
   };
+
+
+//Admin specify operations
 export const addJobs=async(req,res)=>{
     try {
         const { title,job_description,location,salary,requirements,jobType,status,company_name}=req.body
@@ -161,6 +163,29 @@ export const getJobspostedByrecruiter=async (req,res)=>{
     }
     catch(error){
         console.log('Error fetching the jobs posted by recruiter')
+        res.status(500).json({message:error.message})
+    }
+}
+
+export const getallApplicants=async(req,res)=>{
+    try{
+        const recruiterId=req.recruiter._id
+        const recruiter=await Recruiter.findById(recruiterId)
+        const jobsArray=recruiter.Jobsposted
+        const jobs=await Job.find({_id:{$in:jobsArray}})
+        let finaljobs=[]
+        for(let each of jobs){
+            const userIds=each.jobApplicants
+            const applicants=await User.find({_id:{$in:userIds}})
+            if(applicants.length==0) continue
+            for(let applicant of applicants){
+                finaljobs.push({id:each._id,name:applicant.fullName,email:applicant.email,phone:applicant.phone,jobtitle:each.title,jobtype:each.jobType})
+            }
+        }
+        return res.status(200).json(finaljobs)
+        
+    }
+    catch(error){
         res.status(500).json({message:error.message})
     }
 }
