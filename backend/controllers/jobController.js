@@ -189,3 +189,30 @@ export const getallApplicants=async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 }
+
+
+export const updaterecruiterprofile=async(req,res)=>{
+    try{
+        const recruiterId=req.recruiter._id
+        const recruiter=await Recruiter.findById(recruiterId)
+        if(!recruiter){
+            return res.status(404).json({message:"Recruiter not found"})
+        }
+        if(recruiter.isProfileComplete===true){
+            return res.status(400).json({message:"Recruiter profile already completed"})
+        }
+        console.log('j=hi')
+        console.log(req.body)
+        const updatedRecruiter=await Recruiter.findByIdAndUpdate(recruiterId,req.body,{new:true})
+        if(!updatedRecruiter){
+            return res.status(404).json({message:"Recruiter not found"})
+        }
+        else{
+            res.status(200).json(updatedRecruiter)
+        }
+    }
+    catch(error){
+        console.error(error.message)
+        console.log(error)
+    }
+}

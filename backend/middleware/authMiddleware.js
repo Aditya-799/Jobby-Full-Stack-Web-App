@@ -32,7 +32,6 @@ export const protectRoute = async (req, res, next) => {
             return res.status(404).json({message:"Recruiter not found"})
         }
         else{
-            console.log(recruiter)
             req.recruiter=recruiter
         }
     }

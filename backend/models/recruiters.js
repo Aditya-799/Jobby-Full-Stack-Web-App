@@ -9,11 +9,6 @@ const RecruiterSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    password: {
-        type: String,
-        required: true,
-        select: false // Prevents the hashed password from being returned by default queries
-    },
     fullName: {
         type: String,
         required: true,
@@ -21,10 +16,21 @@ const RecruiterSchema = new mongoose.Schema({
     },
     password:{
         type: String,
+        required: true,
+        select:false
+    },
+    phone:{
+        type:String,
+        default:"",
+        required: false
+    },
+    password:{
+        type: String,
         required: true
     },
     profilePic:{
         type: String,
+        default:"",
         required: true
     },
 
@@ -54,7 +60,36 @@ const RecruiterSchema = new mongoose.Schema({
         required: false, // Optional but useful
         trim: true
     },
-
+    companyAddress:{
+        type: String,
+        default: "",
+        required: false
+    },
+    companyLogoUrl:{
+        type:String,
+        default: "",
+        required: false
+    },
+    companyReview:{
+        type: Number,
+        default:0,
+        required: false
+    },
+    companyContactNumber:{
+        type:String,
+        default:"",
+        required: false
+    },
+    companyLinkedInUrl:{
+        type: String,
+        default:"",
+        required: false
+    },
+    companyCorporateEmail:{
+        type:String,
+        default:"",
+        required: false
+    },
     // 3. PLATFORM ROLE & STATUS
     role: {
         type: String,
@@ -70,7 +105,7 @@ const RecruiterSchema = new mongoose.Schema({
     },
     isProfileComplete: {
         type: Boolean,
-        default: true,
+        default: false,
     },
     Jobsposted:[ //It stores the Jobs object id so that we can get all the details and populate it with in the controller
         {
@@ -78,7 +113,8 @@ const RecruiterSchema = new mongoose.Schema({
             ref: 'Job',
             required: false
         }
-    ]
+    ],
+
 }, {
     timestamps: true // Adds 'createdAt' and 'updatedAt' fields automatically
 });
