@@ -9,7 +9,7 @@ export const isRecruiterverified=async(req,res,next)=>{
         if(!recruiter){
             return res.status(404).json({message:"Recruiter not found"})
         }
-        if(recruiter.email !== "" &&
+        if(recruiter.isProfileComplete ||(recruiter.email !== "" &&
     recruiter.fullName !== "" &&
     recruiter.phone!=="" &&
     recruiter.profilePic !== "" &&
@@ -21,7 +21,7 @@ export const isRecruiterverified=async(req,res,next)=>{
     recruiter.companyContactNumber !== "" &&
     recruiter.companyLogoUrl !== "" &&
     recruiter.companyReview !== "" &&
-    recruiter.companyAddress !== ""){
+    recruiter.companyAddress !== "")){
         recruiter.isProfileComplete=true
         await recruiter.save()
         next()

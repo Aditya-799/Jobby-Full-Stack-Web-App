@@ -42,3 +42,13 @@
     border-radius: 4px;
     color: #f8fafc;
 }
+.profile-save-btn{
+    margin-top:20px;
+    width:100px;
+    height:40px;
+    background-color:#2563eb;
+    color:#ffffff;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}

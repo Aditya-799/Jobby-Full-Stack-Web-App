@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
+import { UserContext } from '../../Context/UserContext'
 import Header from '../Header'
 import './index.css'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { toast } from 'react-toastify'
 const ProfileSection = () => {
 
 const [formData,setformData]=useState({
@@ -11,6 +15,7 @@ const [formData,setformData]=useState({
   bio:''
 })
 
+const usercontext=useContext(UserContext)
 
 
 /*
@@ -63,6 +68,50 @@ const [formData,setformData]=useState({
     if (file) uploadFile(file);
     else alert("Please select a file first.");
   };*/
+    const updateProfile=async()=>{
+      try{
+        if(formData.name==="" || formData.email==="" || formData.phone_number==="" || formData.bio==="" || formData.skills.length===0){
+          toast.error('Please fill all the fields')
+          return
+        }
+        const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/update/profile`
+        const headers={
+         'Content-type':'application/json',
+         'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        }
+        const updatedData={
+          fullName:formData.name,
+          email:formData.email,
+          phone_number:formData.phone_number,  
+          bio:formData.bio,
+          skills:formData.skills.split(',').map(skill=>skill.trim())
+        }
+        const response=await axios.put(url,updatedData,{headers})
+        console.log(response)
+        if(response.status===200 || response.statusText==='OK'){
+          
+            toast.success('Profile Updated Successfully')
+            let user=JSON.parse(localStorage.getItem('userData'))
+            user={...user,...updatedData}
+            localStorage.setItem('userData',JSON.stringify(user))
+            usercontext.setUserData(user)
+            localStorage.setItem('isProfileComplete','true')
+            usercontext.setIsProfileComplete(true)
+            setformData({
+              name:'',
+              email:'',
+              phone_number:'',
+              skills:[],
+              bio:''
+            })
+        }
+      }
+      catch(error){
+        toast.error('Profile Updation Failed' + error.message)
+      }
+        }
+
+
     return(
       <>
         <Header />
@@ -79,8 +128,8 @@ const [formData,setformData]=useState({
             <input type="email" className='profile-input' placeholder='Email' onChange={e=>setformData({...formData,email:e.target.value})} value={formData.email}/>
             <label htmlFor="skills" className="profile-label">Skills:</label>
             <input type="text" className='profile-input' placeholder='Skills (comma separated)' onChange={e=>setformData({...formData,skills:e.target.value})} value={formData.skills}/>
-            <input type="file" className="Upload-resume" onChange={handleFileChange} accept="application/pdf application/doc application/docx"/>
-             <br />
+            {/*<input type="file" className="Upload-resume" onChange={handleFileChange} accept="application/pdf application/doc application/docx"/>
+             <br />*/}
             </form>
       {/*<button
         onClick={handleUploadClick}
@@ -97,8 +146,7 @@ const [formData,setformData]=useState({
       >
         {isUploading ? "Uploading..." : "Upload"}
       </button>*/}
-            <button type='button' className='profile-edit-btn'>Edit</button>
-            <button type='button' className='profile-save-btn'>Save</button>
+            <button type='button' className='profile-save-btn' onClick={updateProfile}>Update</button>
 
         </div>
         </>

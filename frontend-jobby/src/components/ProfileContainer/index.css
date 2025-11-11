@@ -44,4 +44,7 @@
     border: none;
     border-radius: 4px;
   }
-  
+  .pc-error-display{
+    color:red;
+    font-size:13px;
+  }

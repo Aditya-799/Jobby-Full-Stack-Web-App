@@ -5,6 +5,7 @@ import axios from "axios"
 import Cookies from 'js-cookie'
 import './index.css';
 import FormDialog from '../Modal';
+import lockImage from '../assets/lock.png'
 import { toast } from 'react-toastify';
 
 
@@ -14,7 +15,8 @@ const [formOpen, setFormOpen] = useState(false);
 const [editOpen, setEditOpen] = useState(false);
 const [jobsData, setJobsData] = useState([]);
 const [dataFetched, setDataFetched] = useState(null);
-
+const [searchItem, setSearchItem] = useState('');
+const [searchedData, setSearchedData] = useState([]);
 
 const handleFormOpen = () => {
         setFormOpen(true);
@@ -53,7 +55,7 @@ const deleteJob= async (jobId)=>{
     const response=await axios.delete(url,{headers})
     if(response.status===200 || response.statusText==='OK'){
         toast.success('Job Deleted Successfully')
-        window.location.reload()
+        fetchData()
     }
     else{
         toast.error('Job Deletion Failed')
@@ -70,10 +72,7 @@ const deleteJob= async (jobId)=>{
     }
 }
 
-
-
-useEffect(() => {
-  const fetchData = async () => {
+const fetchData = async () => {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${Cookies.get('jwtToken')}`
@@ -84,8 +83,19 @@ useEffect(() => {
     setJobsData(data)
   };
 
-  fetchData();
+const getDatabysearch=(event)=>{
+    const value=event.target.value
+    setSearchItem(value)
+    const filteredData=jobsData.filter((job)=>
+        job.title.toLowerCase().includes(value.toLowerCase())   
+    )
+    setSearchedData(filteredData)
+}
+
+useEffect(() => {
+  if(props.isProfileCompleted){fetchData()}
 }, []);
+
 
 
 
@@ -94,10 +104,11 @@ return (
                     <>
                         <h2 className="asc-heading">Job Postings</h2>
                         <p className="asc-description">Manage your job postings and view applications</p>
+                        {props.isProfileCompleted?(<>
                         <div className="menu-jobpostings">
                             <div className="asc-search-container">
                                 <Search className="search-icon" />
-                                <input type="search" className="Search-bar-job-postings" placeholder='Search Postings...'/>
+                                <input type="search" className="Search-bar-job-postings" placeholder='Search Postings...' onChange={getDatabysearch} value={searchItem}/>
                             </div>
                             <select className="asc-dropdown asc-search-container" onChange={changeType} value={jobType}>
                                 <option className="asc-option">All Types</option>
@@ -111,6 +122,7 @@ return (
                             handleClose={handleFormClose}
                             dialog="create"
                             data={dataFetched}
+                            fetchData={fetchData}
                         />
                     )}
                         </div>
@@ -124,7 +136,7 @@ return (
                                     <th className="table-heading">Status</th>
                                     <th className="table-heading">Applications</th>
                                 </tr>
-                            
+
                                     {jobsData.map((job) => (
                                     <tr className="table-line" key={job.id}>
                                         <td className="table-heading title">{job.jobtitle}</td>
@@ -139,7 +151,8 @@ return (
                             open={editOpen}
                             handleClose={handleEditClose}
                             dialog="edit"
-                            data={dataFetched}                        />
+                            data={dataFetched}
+                            fetchData={fetchData}/>
                     )}
 
                                     </tr>
@@ -148,6 +161,11 @@ return (
                                 </tbody>
                             </table>
                         </div>
+                        </>):<div className="profile-not-completed menu-job-postings">
+                                                    <img src={lockImage} alt="profile not completed" className="profile-not-completed-image" />
+                                                    <p className="profile-not-completed-description">Complete your profile to view applications</p>
+                                                </div>}
+                        
                         </>
                     </div>
 );

@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 
 const routetologin = () => {
     Cookies.remove('jwtToken')
-    window.location.href = 'http://localhost:5174/login'
+    window.location.replace('http://localhost:5174/login')
 }
 
 const SettingsTab = () => {

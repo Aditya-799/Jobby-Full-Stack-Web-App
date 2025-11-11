@@ -1,6 +1,7 @@
 import {Plus, Search,Check,X} from 'lucide-react';
 import {useEffect,useState} from 'react'
 import axios from 'axios'
+import lockImage from '../assets/lock.png'
 import Cookies from 'js-cookie'
 import './index.css'
 
@@ -27,7 +28,7 @@ const getAllJobs=async()=>{
 }
 
 useEffect(()=>{
-getAllJobs()
+if(props.isProfileCompleted)getAllJobs()
 },[])
 
 return (
@@ -35,6 +36,7 @@ return (
                     <>
                         <h2 className="asc-heading">Applications</h2>
                         <p className="asc-description">Review and manage candidateapplications</p>
+                        {props.isProfileCompleted? <>
                         <div className="menu-jobpostings">
                             <div className="asc-search-container">
                                 <Search className="search-icon" />
@@ -81,6 +83,11 @@ return (
                                 </tbody>
                             </table>
                         </div>
+                        </> : <div className="profile-not-completed menu-job-postings">
+                            <img src={lockImage} alt="profile not completed" className="profile-not-completed-image" />
+                            <p className="profile-not-completed-description">Complete your profile to view applications</p>
+                        </div>}
+                        
                         </>
                     </div>
 )

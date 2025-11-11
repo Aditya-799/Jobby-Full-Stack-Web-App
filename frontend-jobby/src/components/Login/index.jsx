@@ -43,13 +43,22 @@ const Login=()=>{
         });
         console.log(response)
         if(role==='recruiter'){
-            if(response.data.recruiter.role==='recruiter'){
-          window.location.href='http://localhost:5173/'
-        }
+          if(response.status===201){
+             localStorage.setItem('role',JSON.stringify("recruiter"));
+             const data=response.data.token;
+             toast.success('Login successful')
+             Cookies.set('jwtToken', data, {expires: 30})
+             window.location.href='http://localhost:5173/'
+          }
+          else{
+            toast.error('Login failed');
+          }
       }
+      else{
 
         if (response.status === 200 || response.status === 201) {
           toast.success('Login successful')
+          localStorage.setItem('role',JSON.stringify("user"));
             const { token } = response.data;
             if(token){
             changeToHome(token)
@@ -59,6 +68,7 @@ const Login=()=>{
             toast.error('Login failed');
         }
     } 
+  }
       catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
         console.error('Error:', error.response.data.message);

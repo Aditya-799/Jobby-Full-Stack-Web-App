@@ -1,6 +1,8 @@
-import {useState,useEffect} from 'react'
+import {useState,useEffect,useContext} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {GridLoader} from 'react-spinners'
+import {UserContext} from '../../Context/UserContext'
+import exclamation from '../../assets/exclamation.png'
 import Cookies from 'js-cookie'
 import './index.css'
 import axios from 'axios'
@@ -10,6 +12,7 @@ const ProfileContainer =()=> {
   const [isdatafetched,setisdatafetched]=useState(false)
   const [isLoading,setisLoading]=useState(true)
   const navigate=useNavigate()
+  const userContext=useContext(UserContext)
 
   useEffect(()=>{
     getProfiledetails()
@@ -28,6 +31,7 @@ const ProfileContainer =()=> {
     )
         const {data}=response
         if (data.success===true) {
+          localStorage.setItem('userData',JSON.stringify(data.user))
           setupdatedData(data.user)
           setisdatafetched(true)
           setisLoading(false)
@@ -55,6 +59,7 @@ const ProfileContainer =()=> {
       <div className="profile-container" onClick={()=>navigate('/profile/section')}>
         <img width="80" height="80" src={updatedData.profilePic} alt="external-Profile-Avatar-web-and-networking-flat-circle-design-circle" className="profile-img"/>
         <h1 className="name" style={{marginTop: "10px"}}>{updatedData.fullName?updatedData.fullName.charAt(0).toUpperCase() + updatedData.fullName.slice(1):''}</h1>
+        {userContext.isProfileComplete===false && <p className='pc-error-display'><img src={exclamation} alt='exclamation' className='error-icon'/> Complete your profile</p>}
       </div>
     )
   }

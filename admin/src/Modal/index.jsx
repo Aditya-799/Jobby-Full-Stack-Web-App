@@ -12,7 +12,7 @@ import './index.css';
 
 
 
-export default function FormDialog({open,handleClose,dialog,data}) {
+export default function FormDialog({open,handleClose,dialog,data,fetchData}) {
  
 const [formData,setformData]=useState({
   position:'',
@@ -41,6 +41,8 @@ useEffect(()=>{
   }
 },[data])
 
+
+
 const handleUpdate= async (jobId)=>{
   try{
     if(jobId===undefined || jobId===null || jobId===''){
@@ -64,7 +66,13 @@ const handleUpdate= async (jobId)=>{
       jobId:formData.jobId
     }
     const response=await axios.put(url,data,{headers})
-    window.location.reload()
+    if(response.status===200 || response.statusText==='OK'){
+      toast.success('Job Updated Successfully')
+      fetchData()
+    }
+    else{
+      toast.error('Job Updation Failed')
+    }
     handleClose()
   }
   }
@@ -97,9 +105,9 @@ const handleUpdate= async (jobId)=>{
     
     const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/createjob`,newData,{headers});
     if (response.status === 201 || response.status === 200) {
-      toast.success('Job created successfully');
       handleClose();
-      window.location.reload();
+      toast.success('Job created successfully');
+      fetchData()
     } else {
       toast.error('Job creation failed');
     }

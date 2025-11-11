@@ -1,12 +1,17 @@
 import Cookies from 'js-cookie'
 
-
-//NOt done yet
-
-const ProtectRoute=({children})=>{
-    const cookieVal=Cookies.get('jwtToken')
-    if(cookieVal===undefined){
-        return <Navigate to="/login" replace/>
-    }
-    return children
+const routetologin = () => {
+    Cookies.remove('jwtToken')
+    window.location.href = 'http://localhost:5174/login'
 }
+
+const SettingsTab = () => {
+    return (
+        <div>
+            <h1>Settings</h1>
+            <button onClick={() => routetologin()} className="asc-addJobsbutton">Logout</button>
+        </div>
+    );
+};
+
+export default SettingsTab;

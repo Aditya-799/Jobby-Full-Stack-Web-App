@@ -6,7 +6,7 @@ import './index.css'
 
 const AppliedJobsSection = () => {
 
-  const [appliedJobs,setappliedJobs]=useState([{}])
+  const [appliedJobs,setappliedJobs]=useState([])
 
     useEffect(()=>{
         getAppliedJobs()
@@ -89,7 +89,7 @@ const AppliedJobsSection = () => {
         <Header />
         <div className="applied-jobs-bg-container">
             <h1 className="applied-jobs-heading">Applied Jobs</h1>
-            {renderfoundJobs()}
+            {appliedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs()}
         </div>
         </>
     )

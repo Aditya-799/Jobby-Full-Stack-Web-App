@@ -45,6 +45,7 @@ const updateProfile=async(event)=>{
         companyCorporateEmail:formrecruiterData.companycoorparateEmail
        }
        const response=await axios.post(url,updatedData,{headers})
+       console.log(response)
        if(response.status===200 || response.statusText==='OK'){
            toast.success('Recruiter Profile Updated Successfully')
            setformrecruiterdata({ recruiterName:"",

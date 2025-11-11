@@ -1,8 +1,12 @@
 import AdminFolder from "./AdminFolder";
 import { ToastContainer,toast,Bounce } from "react-toastify";
+import {Routes,Route,useNavigate} from 'react-router-dom'
+import Cookies from 'js-cookie'
+import {useEffect} from 'react'
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  
   return (
     <>
           <ToastContainer
@@ -17,7 +21,9 @@ function App() {
           theme="light"
           transition={Bounce}
           />
-      <AdminFolder />
+          <Routes>
+            <Route path="/" element={<AdminFolder />} />
+          </Routes>
     </>
   )
 }

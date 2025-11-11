@@ -1,14 +1,21 @@
 import { MdHome, MdExitToApp } from 'react-icons/md'
 import { BsFillBriefcaseFill } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { UserContext } from '../../Context/UserContext'
 import Cookies from 'js-cookie'
 import './index.css'
 
 const Header = () => {
   const navigate = useNavigate()
+  const { setUserData, setIsProfileComplete } = useContext(UserContext)
 
   const handleLogout = () => {
     Cookies.remove('jwtToken')
+    setUserData({});
+    setIsProfileComplete(false);
+    localStorage.removeItem('userData');
+    localStorage.removeItem('isProfileComplete');
     navigate('/login', { replace: true })
   }
 
@@ -50,7 +57,7 @@ const Header = () => {
           <p>Jobs</p>
         </Link>
         <Link to="/jobs/applied" className="nav-item">
-          <p>Jobs Applied</p>
+          <p>Jobs Board</p>
         </Link>
       </div>
       <div className="nav-items-section">

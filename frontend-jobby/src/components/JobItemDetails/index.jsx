@@ -1,11 +1,13 @@
 import {MdLocationOn} from 'react-icons/md'
 import {FaSuitcase, FaStar, FaExternalLinkAlt,FaArrowLeft} from 'react-icons/fa'
 import {toast} from 'react-toastify'
-import {useState,useEffect} from 'react'
+import {useState,useEffect,useContext} from 'react'
 import Cookies from 'js-cookie'
 import {useNavigate} from 'react-router-dom'  
 import SkillItem from '../SkillItem'
 import {GridLoader} from 'react-spinners'
+import { UserContext } from '../../Context/UserContext'
+import exclamation from '../../assets/exclamation.png'
 import axios from 'axios'
 import Header from '../Header'
 import './index.css'
@@ -17,7 +19,7 @@ const JobItemDetails = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isFailure, setIsFailure] = useState(false)
   const [totalDetails, setTotalDetails] = useState({})
-  
+  const userContext=useContext(UserContext)
   /*state = {
     totalDetails: {},
     isLoading: true,
@@ -29,9 +31,6 @@ const JobItemDetails = () => {
     getJobDetails()
   }, [])
 
-  /*componentDidMount() {
-    this.getJobDetails()
-  }*/
 
   const convertsimilarJobs = data => {
     const newData = data.map(eachItem => ({
@@ -46,7 +45,7 @@ const JobItemDetails = () => {
     return newData
   }
 
-  
+
 
   const getJobDetails = async () => {
     // Alternative method: extract ID from URL directly
@@ -202,7 +201,11 @@ const JobItemDetails = () => {
           <div className="card-bottom-section">
             <div className="description-container">
               <h1 className="jid-job-name">Description</h1>
-              <button className='logout-button' onClick={ApplyJob}>Apply</button>
+              {
+                userContext.isProfileComplete===false ? (<div className='jid-error-container-disabled'><button className='logout-button-disabled'>Apply</button>
+                <div className='jid-inner-error-container'><img src={exclamation} alt='error-logo' className='error-icon'/><p className="jid-error">Complete your profile to apply</p></div></div>) :(<button className='logout-button' onClick={ApplyJob}>Apply</button>)
+              }
+              
             </div>
             <p className="job-desc desc-container job-desc-new">{jobDescription}</p>
             <h1 className="jid-job-name">Skills</h1>

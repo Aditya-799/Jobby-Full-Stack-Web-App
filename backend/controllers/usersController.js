@@ -17,7 +17,6 @@ export const getUserProfile = async (req, res) => {
 };
 
 
-//Not done yet
 
 export const updateProfile=async (req,res)=>{
     try{
@@ -32,6 +31,7 @@ export const updateProfile=async (req,res)=>{
         const updatedUser = await User.findByIdAndUpdate(
             req.user._id,
             { $set: updateData },
+            {isProfileComplete:true},
             { new: true, runValidators: true }
           );
       

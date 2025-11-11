@@ -52,6 +52,7 @@ const salaryRangesList = [
 
 
 const App = () => {
+  
   return (
     <>
     <ToastContainer
