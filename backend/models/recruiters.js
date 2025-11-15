@@ -114,6 +114,18 @@ const RecruiterSchema = new mongoose.Schema({
             required: false
         }
     ],
+    Acceptedcandidates:[{
+        jobId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Job',
+            required: false
+        },
+        candidateId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: false
+        }
+}]
 
 }, {
     timestamps: true // Adds 'createdAt' and 'updatedAt' fields automatically

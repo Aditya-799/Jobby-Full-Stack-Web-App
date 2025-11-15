@@ -38,11 +38,10 @@ export const getAllJobs = async (req, res) => {
       res.status(500).json({ message: 'An unexpected error occurred.' });
     }
   };
-
-
 //Admin specify operations
 export const addJobs=async(req,res)=>{
     try {
+        const recruiterId=req.recruiter._id
         const { title,job_description,location,salary,requirements,jobType,status,company_name}=req.body
         if(!title || !job_description || !location || !salary || !requirements || !jobType || !status || !company_name){
             return res.status(400).json({message:"All fields are required"})
@@ -60,7 +59,7 @@ export const addJobs=async(req,res)=>{
         else{
         */
         const job=await Job.create({
-            recruiter:req.recruiter._id,
+            recruiterId:recruiterId,
             title,
             description,
             job_description,
@@ -71,7 +70,7 @@ export const addJobs=async(req,res)=>{
             jobType,status})
         
         
-        const recruiter=await Recruiter.findById(req.recruiter._id)
+        const recruiter=await Recruiter.findById(recruiterId)
         if(recruiter){
             console.log('pushing the data into the jobs posted by recruiter')
             recruiter.Jobsposted.push(job._id)
@@ -98,8 +97,22 @@ export const getJobById=async(req,res)=>{
 export const deleteJob=async (req,res)=>{
     try{
         const jobId=req.params.id
+        const recruiterId=req.recruiter._id
+        const recruiter=await Recruiter.findById(recruiterId)
+        if(!recruiter){
+            return res.status(404).json({message:"Recruiter not found"})
+        }
+        if(recruiter.Jobsposted.indexOf(jobId)===-1){
+            return res.status(403).json({message:"You are not authorized to delete this job"})
+        }
+        const AcceptedJobsandCandidates=recruiter.Acceptedcandidates.filter(each=>each.jobId.toString()!==jobId)
+        if(AcceptedJobsandCandidates.length>0){
+            return res.status(400).json({message:"Cannot delete job with accepted candidates"})
+        }
+        recruiter.Acceptedcandidates=AcceptedJobsandCandidates
+        await recruiter.save()
         await Job.findByIdAndDelete(jobId)
-        await Recruiter.updateOne({_id:req.recruiter._id},{$pull:{Jobsposted:jobId}})
+        await Recruiter.findByIdAndUpdate(recruiterId,{$pull:{Jobsposted:jobId}})
         res.status(200).json({message:"Job deleted successfully"})
     }
     catch(error){
@@ -179,7 +192,7 @@ export const getallApplicants=async(req,res)=>{
             const applicants=await User.find({_id:{$in:userIds}})
             if(applicants.length==0) continue
             for(let applicant of applicants){
-                finaljobs.push({id:each._id,name:applicant.fullName,email:applicant.email,phone:applicant.phone,jobtitle:each.title,jobtype:each.jobType})
+                finaljobs.push({id:each._id,userId:applicant._id,name:applicant.fullName,email:applicant.email,phone:applicant.phone,jobtitle:each.title,jobtype:each.jobType})
             }
         }
         return res.status(200).json(finaljobs)
@@ -233,3 +246,81 @@ export const isRecruiterverifiedroute=async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 }
+
+export const AcceptJob = async (req, res) => {
+  try {
+    const recruiterId = req.recruiter._id;
+    const { jobId, userId,action} = req.body
+
+    const [recruiter, job, user] = await Promise.all([
+      Recruiter.findById(recruiterId),
+      Job.findById(jobId),
+      User.findById(userId),
+    ]);
+
+    if (!recruiter) return res.status(404).json({ message: "Recruiter not found" });
+    if (!job) return res.status(404).json({ message: "Job not found" });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if(recruiter.Jobsposted.indexOf(jobId)===-1){
+        return  res.status(403).json({ message: "You are not authorized to accept applicants for this job" });
+    }
+
+    if (user.AcceptedJobs.includes(jobId)) {
+      return res.status(400).json({ message: "User already accepted for this job" });
+    }
+
+    if(user.RejectedJobs.includes(jobId)){
+        return res.status(400).json({ message: "User already rejected for this job" });
+    }
+
+    // Update user
+        if(action==='accept'){
+            
+
+            //Update recruiter
+            const alreadyAccepted = await Recruiter.findOne({
+                _id: recruiterId,
+                "Acceptedcandidates.jobId": jobId,
+                "Acceptedcandidates.candidateId": userId,
+            });
+
+            if (alreadyAccepted) {
+                return res.status(400).json({ message: "Already accepted this user for this job" });
+            }
+
+            await Recruiter.updateOne(
+                { _id: recruiterId },
+                { $push: { Acceptedcandidates: { jobId, candidateId: userId } } }
+            );
+
+            user.AcceptedJobs.push(jobId);
+            await user.save();
+
+            user.Appliedjobs.pull(jobId);
+            await user.save();
+
+            // Update job
+            job.jobApplicants.pull(userId);
+            await job.save();
+
+            return res.status(201).json({ message: "User job accepted successfully" });
+    }
+   else if(action==='reject'){
+        user.RejectedJobs.push(jobId);
+        await user.save();
+
+        user.Appliedjobs.pull(jobId);
+        await user.save();
+
+        // Update job
+        job.jobApplicants.pull(userId);
+        await job.save();
+   }
+   else{
+        res.status(400).json({message:"Invalid action"})
+   }
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

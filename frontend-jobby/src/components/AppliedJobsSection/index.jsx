@@ -7,17 +7,27 @@ import './index.css'
 const AppliedJobsSection = () => {
 
   const [appliedJobs,setappliedJobs]=useState([])
+  const [acceptedJobs,setacceptedJobs]=useState([])
+  const [rejectedJobs,setrejectedJobs]=useState([])
+  const [selectedOption,setselectedOption]=useState('Applied Jobs')
 
-    useEffect(()=>{
-        getAppliedJobs()
-    },[])
 
-    
 
-    const renderfoundJobs = () => (
+  useEffect(() => {
+  if (selectedOption === "Applied Jobs") {
+    getAppliedJobs();
+  } else if (selectedOption === "Accepted Jobs") {
+    getAcceptedJobs();
+  } else if (selectedOption === "Rejected Jobs") {
+    getRejectedJobs();
+  }
+}, [selectedOption]);   // runs only when option changes
+
+    console.log(selectedOption)
+    const renderfoundJobs = (items) => (
   <div className="applied-job-outer-container">
     <ul>
-      {appliedJobs.map(eachItem => (
+      {items.map(eachItem => (
         <li key={eachItem.id}>
           <div className="applied-job-container">
             <div className='company-details'>
@@ -83,13 +93,75 @@ const AppliedJobsSection = () => {
     }
   }
 
+  const getAcceptedJobs=async ()=>{
+    try{
+      const jwtToken=Cookies.get('jwtToken')
+      const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/accepted-jobs`
+      const response=await axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${jwtToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if(response.status===200 || response.statusText==='OK'){
+        const {data}=response
+        setacceptedJobs(data)
+      }
+      else{
+        console.log("error")
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
 
-    return (
+  const getRejectedJobs=async ()=>{
+    try{
+      const jwtToken=Cookies.get('jwtToken')
+      const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/rejected-jobs`
+      const response=await axios.get(url, {
+        headers: {
+          'Authorization': `Bearer ${jwtToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if(response.status===200 || response.statusText==='OK'){
+        const {data}=response
+        setrejectedJobs(data)
+      }
+      else{
+        console.log("error")
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  const renderselectedOptionJobs=()=>{
+    if(selectedOption==="Applied Jobs"){
+      return appliedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs(appliedJobs)
+    } else if(selectedOption==="Accepted Jobs"){
+      return acceptedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs(acceptedJobs)
+    } else if(selectedOption==="Rejected Jobs"){
+      return rejectedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs(rejectedJobs)
+    }
+  }
+
+  return (
         <>
         <Header />
         <div className="applied-jobs-bg-container">
             <h1 className="applied-jobs-heading">Applied Jobs</h1>
-            {appliedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs()}
+            <select className="applied-jobs-sortby-dropdown" value={selectedOption} onChange={(e)=>setselectedOption(e.target.value)}>
+              <option value="Applied Jobs" className="aj-options">Applied Jobs</option>
+              <option value="Accepted Jobs" className="aj-options">Accepted Jobs</option>
+              <option value="Rejected Jobs" className="aj-options">Rejected Jobs</option>
+            </select>
+
+            {renderselectedOptionJobs()}
         </div>
         </>
     )

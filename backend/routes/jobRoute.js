@@ -1,7 +1,7 @@
 import express from "express"
 import {protectRoute } from "../middleware/authMiddleware.js"
 import checkRecruiter from "../middleware/checkrecruiter.js"
-import {getAllJobs,addJobs,getJobById,deleteJob,updateJob,getApplicants,updaterecruiterprofile,isRecruiterverifiedroute,getJobspostedByrecruiter,getallApplicants} from "../controllers/jobController.js"
+import {getAllJobs,addJobs,getJobById,deleteJob,updateJob,getApplicants,updaterecruiterprofile,isRecruiterverifiedroute,getJobspostedByrecruiter,getallApplicants,AcceptJob} from "../controllers/jobController.js"
 import  {isRecruiterverified}  from "../middleware/recruiterprofile.js"
 const router=express.Router()
 
@@ -32,5 +32,7 @@ router.delete('/delete/job/:id',checkRecruiter,isRecruiterverified,deleteJob)
 router.get('/get/allapplicants',checkRecruiter,isRecruiterverified,getallApplicants)
 
 router.get('/:id/applicants',checkRecruiter,getApplicants)
+
+router.post('/accept/applicant/job/',checkRecruiter,isRecruiterverified,AcceptJob)
 
 export default router

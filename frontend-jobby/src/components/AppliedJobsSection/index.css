@@ -34,3 +34,17 @@
     display:flex;
     width:100%;
 }
+.applied-jobs-sortby-dropdown{
+    margin-top:20px;
+    margin-bottom:20px;
+    width:300px;
+    padding:10px;
+    background-color:#374151;
+    color:white;
+    font-size:18px;
+    border:none;
+    border-radius:5px;
+}
+.aj-options:hover{
+    background-color:#6366f1;
+}

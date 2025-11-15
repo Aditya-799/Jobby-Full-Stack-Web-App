@@ -33,6 +33,8 @@ const ProfileContainer =()=> {
         if (data.success===true) {
           localStorage.setItem('userData',JSON.stringify(data.user))
           setupdatedData(data.user)
+          userContext.setUserData(data.user)
+          userContext.setIsProfileComplete(data.user.isProfileComplete)
           setisdatafetched(true)
           setisLoading(false)
          /* this.setState({

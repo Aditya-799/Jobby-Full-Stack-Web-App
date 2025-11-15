@@ -111,13 +111,19 @@ const JobItemDetails = () => {
     if(response.status===200 || response.statusText==='OK'){
       toast.success("Job Applied Successfully")
     }
-    else{
-      toast.error("Job Not Applied")
+    else if(response.status===409){
+      toast.error("Job Already Applied")
     }
     }
     catch(error){
       console.error(error)
-      toast.error("Job Application Failed")
+      if (error.response.status === 409) {
+        toast.error('You have already applied for this job');
+      } else if (error.response.status === 404) {
+        toast.error('Job not found');
+      } else {
+        toast.error('Job Application Failed');
+      }
     }
   }
 

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
 const jobSchema = new mongoose.Schema({
-  user: {
+  recruiterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: false,
-    ref: 'User'
+    ref: 'Recruiter'
   },
   title: {
     type: String,
@@ -15,6 +15,10 @@ const jobSchema = new mongoose.Schema({
   description: {
     type: String,
     required: [true, 'Please add a job description.'],
+  },
+  rating:{
+    type:String,
+    required:false
   },
   location: {
     type: String,

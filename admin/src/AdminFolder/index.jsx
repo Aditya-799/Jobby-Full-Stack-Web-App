@@ -82,7 +82,7 @@ import {  Settings, Briefcase, FileText,Search, Plus,User} from 'lucide-react';
 
                      {activeOption==="Jobs" && <JobsPosted jobType={jobType} changeType={changeType} isProfileCompleted={isProfileCompleted}/>}
                      {activeOption==="Applications" && <ApplicationsTab jobType={jobType} changeType={changeType}  isProfileCompleted={isProfileCompleted}/>}
-                    {activeOption==="Profile" && <RecruiterForm/>}
+                    {activeOption==="Profile" && <RecruiterForm isProfileCompleted={isProfileCompleted}/> }
                     {activeOption==="Settings" && <SettingsTab/>}
 
                 </div>

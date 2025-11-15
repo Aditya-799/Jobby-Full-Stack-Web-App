@@ -27,6 +27,32 @@ const getAllJobs=async()=>{
 
 }
 
+
+const Jobaction=async (action,userId,jobId)=>{
+    try{
+        const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/accept/applicant/job/`
+        const headers={
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        }
+        const body={
+            action:action,
+            userId:userId,
+            jobId:jobId
+        }
+
+        const response=await axios.post(url,JSON.stringify(body),{headers})
+        if(response.status===200){
+            const data=response.data
+            console.log(data)
+            windiow.location.reload()
+        }
+    }
+    catch(error){
+        console.error(error)
+    }
+}
+
 useEffect(()=>{
 if(props.isProfileCompleted)getAllJobs()
 },[])
@@ -74,8 +100,8 @@ return (
                                     <td className="table-heading data">Active</td>
                                     <td className="table-heading data">Applications</td>
                                     <td className="table-heading data"><div className="">
-                                        <Check className="check-icon" />
-                                        <X className="cross-icon" />
+                                        <Check className="check-icon" onClick={()=>(Jobaction('accept',each.userId,each.id))}/>
+                                        <X className="cross-icon" onClick={()=>(Jobaction('reject',each.userId,each.id))}/>
                                         </div></td>
                                 </tr>
                                 ))
@@ -83,7 +109,7 @@ return (
                                 </tbody>
                             </table>
                         </div>
-                        </> : <div className="profile-not-completed menu-job-postings">
+                        </> : <div className="profile-completed-menu-job-postings">
                             <img src={lockImage} alt="profile not completed" className="profile-not-completed-image" />
                             <p className="profile-not-completed-description">Complete your profile to view applications</p>
                         </div>}

@@ -1,4 +1,4 @@
-import jwt, { decode } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import User from '../models/Users.js';
 import dotenv from 'dotenv';
 import Recruiter from '../models/recruiters.js';
@@ -9,13 +9,9 @@ export const protectRoute = async (req, res, next) => {
         // Get token from cookies OR Authorization header
         let token = req.cookies.jwt;
         // If no cookie, check Authorization header
-        console.log(req.headers.authorization)
         if (!token && req.headers.authorization) {
             token = req.headers.authorization.replace('Bearer ', '');
         }
-        
-        console.log('Token found:', !!token);
-        
         if(!token){
             return res.status(401).json({message:"No token provided"})
         }

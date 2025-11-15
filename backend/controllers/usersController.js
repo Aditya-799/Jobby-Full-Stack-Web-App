@@ -17,11 +17,10 @@ export const getUserProfile = async (req, res) => {
 };
 
 
-
 export const updateProfile=async (req,res)=>{
     try{
         const {fullName,email,bio,skills,phone}=req.body
-        const allowedFields=['email','bio','skills']
+        const allowedFields=['phone','fullName','email','bio','skills']
         const updateData={}
         for(const field in req.body){
             if(allowedFields.includes(field)){
@@ -30,8 +29,7 @@ export const updateProfile=async (req,res)=>{
         }
         const updatedUser = await User.findByIdAndUpdate(
             req.user._id,
-            { $set: updateData },
-            {isProfileComplete:true},
+            { $set: {... updateData,isProfileComplete:true} },
             { new: true, runValidators: true }
           );
       
@@ -107,8 +105,12 @@ export const applyJob=async(req,res)=>{
         return res.status(404).json({message:"Job not found"});
     }
     if(user.Appliedjobs.includes(jobId)){
-        return res.status(400).json({message:"You have already applied for this job"});
+        return res.status(409).json({message:"You have already applied for this job"});
     }
+    if(user.AcceptedJobs.includes(jobId) || user.RejectedJobs.includes(jobId)){
+        return res.status(409).json({message:"You cannot reapply for this job"});
+    }
+
     job.jobApplicants.push(userId);                
     user.Appliedjobs.push(jobId);
     await job.save();
@@ -124,11 +126,88 @@ export const getAppliedJobs=async(req,res)=>{
     try{
         const userId=req.user._id
         const userdetails=await User.findById(userId)
+        const existingJobs = await Job.find({
+      _id: { $in: userdetails.Appliedjobs }
+    }).select("_id");
+
+    const validIds = existingJobs.map(j => j._id.toString());
+
+    userdetails.Appliedjobs = userdetails.Appliedjobs.filter(id =>
+      validIds.includes(id.toString())
+    );
+
+        await userdetails.save();
         const jobId=userdetails.Appliedjobs
         const jobs=await Job.find({_id:{$in:jobId}})
         const sendingdata=[]
         for(let each of jobs){
-            sendingdata.push({id:each._id,jobtitle:each.title,jobtype:each.jobType,rating:each.rating,status:each.status,rating:each.rating,company_name:each.company_name,location:each.location,salary:each.salary,company_logo_url:each.company_logo_url})
+            sendingdata.push({id:each._id,jobtitle:each.title,jobtype:each.jobType,rating:each.rating,
+                status:each.status,rating:each.rating,company_name:each.company_name,location:each.location,
+                salary:each.salary,company_logo_url:each.company_logo_url})
+        }
+        if(sendingdata.length===0){
+            return res.status(400).json({message:"You have not applied for any job"})
+        }
+        res.status(200).json(sendingdata)
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
+export const getAcceptedJobs=async(req,res)=>{
+    try{
+        const userId=req.user._id
+        const userdetails=await User.findById(userId)
+        const existingJobs = await Job.find({
+      _id: { $in: userdetails.AcceptedJobs }
+    }).select("_id");
+
+    const validIds = existingJobs.map(j => j._id.toString());
+
+    userdetails.AcceptedJobs = userdetails.AcceptedJobs.filter(id =>
+      validIds.includes(id.toString())
+    );
+
+        await userdetails.save();
+        const AcceptedJobs=userdetails.AcceptedJobs
+        const jobs=await Job.find({_id:{$in:AcceptedJobs}})
+        const sendingdata=[]
+        for(let each of jobs){
+            sendingdata.push({id:each._id,jobtitle:each.title,jobtype:each.jobType,rating:each.rating,
+                status:each.status,rating:each.rating,company_name:each.company_name,location:each.location,
+                salary:each.salary,company_logo_url:each.company_logo_url})
+        }
+        if(sendingdata.length===0){
+            return res.status(400).json({message:"You have not applied for any job"})
+        }
+        res.status(200).json(sendingdata)
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
+
+export const getRejectedJobs=async(req,res)=>{
+    try{
+        const userId=req.user._id
+        const userdetails=await User.findById(userId)
+        const existingJobs = await Job.find({
+      _id: { $in: userdetails.RejectedJobs }
+    }).select("_id");
+    const validIds = existingJobs.map(j => j._id.toString());
+    userdetails.RejectedJobs = userdetails.RejectedJobs.filter(id =>
+      validIds.includes(id.toString())
+    );
+         await userdetails.save();
+        const RejectedJobs=userdetails.RejectedJobs
+        const jobs=await Job.find({_id:{$in:RejectedJobs}})
+        const sendingdata=[]
+        for(let each of jobs){
+            sendingdata.push({id:each._id,jobtitle:each.title,jobtype:each.jobType,rating:each.rating,
+                status:each.status,rating:each.rating,company_name:each.company_name,location:each.location,
+                salary:each.salary,company_logo_url:each.company_logo_url})
         }
         if(sendingdata.length===0){
             return res.status(400).json({message:"You have not applied for any job"})

@@ -68,7 +68,8 @@ const usercontext=useContext(UserContext)
     if (file) uploadFile(file);
     else alert("Please select a file first.");
   };*/
-    const updateProfile=async()=>{
+    const updateProfile=async(e)=>{
+      e.preventDefault()
       try{
         if(formData.name==="" || formData.email==="" || formData.phone_number==="" || formData.bio==="" || formData.skills.length===0){
           toast.error('Please fill all the fields')
@@ -117,19 +118,21 @@ const usercontext=useContext(UserContext)
         <Header />
         <div className='profile-section-container'>
           <h1 className="profile-heading">Complete Your profile</h1>
-            <form className="profile-form">
+            <form className="profile-form" onSubmit={updateProfile}>
               <label htmlFor="fullName" className="profile-label">Full Name</label>
             <input type="text" className='profile-input' placeholder='Full Name' onChange={e=>setformData({...formData,name:e.target.value})} value={formData.name}/>
             <label htmlFor="bio" className="profile-label">Bio</label>
             <textarea className='profile-text-input' placeholder='Bio' min-rows="2" rows="4" max-rows="7" onChange={e=>setformData({...formData,bio:e.target.value})} value={formData.bio}></textarea>
             <label htmlFor="phone" className="profile-label">Phone Number</label>
-            <input type="text" className='profile-input' placeholder='Phone Number' onChange={e=>setformData({...formData,phone_number:e.target.value})} value={formData.phone_number}/>
+            <input type="tel" className='profile-input' placeholder='Phone Number Ex: +919876543210' 
+            pattern="^(?:\+91|0)?[6-9]\d{9}$" maxLength='14' onChange={e=>setformData({...formData,phone_number:e.target.value})} value={formData.phone_number}/>
             <label htmlFor="email" className="profile-label">Email:</label>
             <input type="email" className='profile-input' placeholder='Email' onChange={e=>setformData({...formData,email:e.target.value})} value={formData.email}/>
             <label htmlFor="skills" className="profile-label">Skills:</label>
             <input type="text" className='profile-input' placeholder='Skills (comma separated)' onChange={e=>setformData({...formData,skills:e.target.value})} value={formData.skills}/>
             {/*<input type="file" className="Upload-resume" onChange={handleFileChange} accept="application/pdf application/doc application/docx"/>
              <br />*/}
+             <button type='submit' className='profile-save-btn'>Update</button>
             </form>
       {/*<button
         onClick={handleUploadClick}
@@ -146,7 +149,7 @@ const usercontext=useContext(UserContext)
       >
         {isUploading ? "Uploading..." : "Upload"}
       </button>*/}
-            <button type='button' className='profile-save-btn' onClick={updateProfile}>Update</button>
+            
 
         </div>
         </>
