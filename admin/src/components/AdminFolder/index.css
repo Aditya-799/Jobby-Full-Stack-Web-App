@@ -168,3 +168,11 @@ color:white;
     color:white;
     font-size:16px;
 }
+.asc-logout-button{
+    background-color:transparent;
+    border:none;
+    display:flex;
+    width:100%;
+    margin-left:0px;
+    padding-left:0px;
+}

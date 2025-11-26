@@ -23,7 +23,6 @@ const AppliedJobsSection = () => {
   }
 }, [selectedOption]);   // runs only when option changes
 
-    console.log(selectedOption)
     const renderfoundJobs = (items) => (
   <div className="applied-job-outer-container">
     <ul>
@@ -63,19 +62,19 @@ const AppliedJobsSection = () => {
 )
 
 
-    const rendernotfoundJobs = () => (
+    const rendernotfoundJobs = (text) => (
     <div className="failure-view-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
         alt="no jobs"
         className="failure-view-image"
       />
-      <h1 className="applied-jobs-heading">No Applied Jobs Found</h1>
+      <h1 className="applied-jobs-heading">{`No ${text} Jobs Found`}</h1>
     </div>
   )
 
   const getAppliedJobs=async ()=>{
-    const jwtToken=Cookies.get('jwtToken')
+    const jwtToken=Cookies.get('userToken')
     const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/appliedjobs`
     const response=await axios.get(url, {
       headers: {
@@ -85,7 +84,6 @@ const AppliedJobsSection = () => {
     })
     if(response.status===200 || response.statusText==='OK'){
       const {data}=response
-      console.log(data)
       setappliedJobs(data)
     }
     else{
@@ -95,7 +93,7 @@ const AppliedJobsSection = () => {
 
   const getAcceptedJobs=async ()=>{
     try{
-      const jwtToken=Cookies.get('jwtToken')
+      const jwtToken=Cookies.get('userToken')
       const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/accepted-jobs`
       const response=await axios.get(url, {
         headers: {
@@ -118,7 +116,7 @@ const AppliedJobsSection = () => {
 
   const getRejectedJobs=async ()=>{
     try{
-      const jwtToken=Cookies.get('jwtToken')
+      const jwtToken=Cookies.get('userToken')
       const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/rejected-jobs`
       const response=await axios.get(url, {
         headers: {
@@ -142,11 +140,11 @@ const AppliedJobsSection = () => {
 
   const renderselectedOptionJobs=()=>{
     if(selectedOption==="Applied Jobs"){
-      return appliedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs(appliedJobs)
+      return appliedJobs.length===0 ? rendernotfoundJobs('Applied') : renderfoundJobs(appliedJobs)
     } else if(selectedOption==="Accepted Jobs"){
-      return acceptedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs(acceptedJobs)
+      return acceptedJobs.length===0 ? rendernotfoundJobs('Accepted') : renderfoundJobs(acceptedJobs)
     } else if(selectedOption==="Rejected Jobs"){
-      return rejectedJobs.length===0 ? rendernotfoundJobs() : renderfoundJobs(rejectedJobs)
+      return rejectedJobs.length===0 ? rendernotfoundJobs('Rejected') : renderfoundJobs(rejectedJobs)
     }
   }
 

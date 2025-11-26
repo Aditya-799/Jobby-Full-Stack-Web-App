@@ -1,9 +1,8 @@
 import axios from "axios";
 import {Navigate,useNavigate,Link} from 'react-router-dom'
-import {ToastContainer,toast,Bounce} from "react-toastify";
+import {toast} from "react-toastify";
 import {useState} from 'react'
 import Cookies from "js-cookie";
-import dotenv from 'dotenv'
 import './index.css';
 
 const Login=()=>{
@@ -12,9 +11,9 @@ const Login=()=>{
     const [role,setrole]=useState('recruiter')
     const navigate=useNavigate()
 
-    const jwtToken = Cookies.get('jwtToken')
+    const jwtToken = Cookies.get('userToken')
     if (jwtToken !== undefined) {
-      return <Navigate to="/home" replace/>
+        return <Navigate to="/home" replace/>
     }
 
     const changedEmail = event => {
@@ -25,7 +24,7 @@ const Login=()=>{
       setPassword(event.target.value)
   }
  const changeToHome = data => {
-    Cookies.set('jwtToken', data, {expires: 30})
+    Cookies.set('userToken', data, {expires: 30})
     navigate('/home',{replace:true})
   }
 
@@ -34,20 +33,18 @@ const Login=()=>{
     }
     const handleSubmit= async (e)=>{
         e.preventDefault()
-        console.log(role)
         try {
         const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/login`, {
             email,
             password,
             role,
         });
-        console.log(response)
         if(role==='recruiter'){
           if(response.status===201){
              localStorage.setItem('role',JSON.stringify("recruiter"));
              const data=response.data.token;
              toast.success('Login successful')
-             Cookies.set('jwtToken', data, {expires: 30})
+             Cookies.set('recruiterToken', data, {expires: 30})
              window.location.href='http://localhost:5173/'
           }
           else{

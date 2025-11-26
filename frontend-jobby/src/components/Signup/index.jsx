@@ -10,6 +10,9 @@ const Signup = () => {
     const [password,setPassword] = useState('')
     const [role,setRole] = useState('recruiter')
     const [username,setUsername] = useState('')
+    const [Otp,setOtp] = useState('')
+    const [reviewOtpbox,setReviewOtpbox] = useState(false)
+    const [emailverified,setemailverified] = useState(false)
     const navigate=useNavigate()
     const changedUsername = event => {
     setUsername(event.target.value)
@@ -25,10 +28,54 @@ const Signup = () => {
   const changedEmail=event=>{
         setEmail(event.target.value)
     }
+    const sendOtp=async(event)=>{
+      event.preventDefault()
+      try{
+        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/sendOtp`, {
+            email
+        });
+        if (response.status === 200) {
+            toast.success('Otp sent successfully');
+            setReviewOtpbox(true)
+        } else {
+          toast.error('Otp sending failed');
+        }
+      }
+      catch(error){
+        toast.error(error.message)
+      }
+    }
+    const verifyOtp=async(e)=>{
+      e.preventDefault()
+      try{
+        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/verifyOtp`, {
+            email,
+            otp:Otp
+        });
+
+        if (response.status === 201) {
+            toast.success('Otp verified successfully');
+            setemailverified(true)
+        } else {
+          toast.error('Otp verification failed');
+        }
+      }
+      catch(error){
+        toast.error(error.message)
+      }
+    }
+
+
+  const changedOtp=event=>{
+        setOtp(event.target.value)
+    }
 
   const handleSubmit= async (e)=>{
         e.preventDefault()
         try {
+          if(emailverified===false){
+            toast.error('Email not verified')
+          }else{
         const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/signup`, {
             fullName:username,
             email,
@@ -38,12 +85,10 @@ const Signup = () => {
         if (response.status === 201 || response.status===200) {
             toast.success('Signup successful');
             navigate('/login',{replace:true})
-            localStorage.setItem('userName',JSON.stringify(username));
-            localStorage.setItem('email',JSON.stringify(email))
         } else {
           toast.error('Signup failed');
         }
-    } catch (error) {
+    } }catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
         console.error('Error:', error.response.data.message);
         toast.error(error.response.data.message);
@@ -55,12 +100,6 @@ const Signup = () => {
 }
         
     }
-
-       /* const cookieval=Cookies.get('jwtToken')
-        if(cookieval!==undefined){
-            <Navigate to='/home' replace/>
-        }
-        console.log(role,password,email,username)*/
         return(
              <div className="bg-container">
         <div className="card-container">
@@ -84,6 +123,7 @@ const Signup = () => {
             <label htmlFor="signupemail" className="username-heading">
                 EMAIL
             </label>
+            <div className='otp-container'>
             <input
               type="email"
               className="username"
@@ -92,6 +132,15 @@ const Signup = () => {
               onChange={changedEmail}
               value={email}
             />
+            <button type="button" className='side-button extraspace' onClick={sendOtp}>Send OTP</button>
+            </div>
+            {reviewOtpbox && <>
+            <label htmlFor="Verifyemail" className="username-heading">Verify Email</label>
+            <div className='otp-container'>
+              <input type="text" className="username" placeholder="Enter OTP" onChange={changedOtp} value={Otp}/>
+            <button type="button" className='side-button' onClick={verifyOtp}>Verify</button>
+            </div>
+            </>}
             <label htmlFor="signupPassword" className="username-heading">
               PASSWORD
             </label>
@@ -126,9 +175,3 @@ const Signup = () => {
     }
 
     export default Signup;
-
-
-
-   /* <Link to="/login" className="link">
-             Login
-          </Link>*/

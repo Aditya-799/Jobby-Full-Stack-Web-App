@@ -2,6 +2,7 @@
     padding-bottom: 20px;
     background-color: #000000;
     min-height: 100vh;
+    width:100vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -59,9 +60,7 @@
     color: white;
     font-size: 20px;
   }
-  .full-screen{
-    min-width:100vw;
-  }
+ 
   
   
   @media (min-width: 767px) {
@@ -79,8 +78,11 @@
       color: white;
     }
     .jid-job-name1 {
-      font-size: 28px;
+      font-size:28px;
       color: white;
+    }
+    .pack{
+      font-size:18px;
     }
     .desc-container {
       width: 90%;
@@ -149,7 +151,6 @@
     }
     .jid-job-name1 {
       color: white;
-      font-size: 20px;
       margin-bottom: 0px;
       padding-bottom: 3px;
     }
@@ -224,4 +225,7 @@
   }
   .jid-inner-error-container{
     display:flex;
+  }
+   .full-screen{
+    width:100vw;
   }

@@ -1,15 +1,15 @@
 import React, { useState,useContext } from 'react'
-import { UserContext } from '../../Context/UserContext'
+import { UserContext } from '../../Context/createContext'
 import Header from '../Header'
 import './index.css'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify'
+import circle from '../../assets/circle.png'
 const ProfileSection = () => {
 
 const [formData,setformData]=useState({
   name:'',
-  email:'',
   phone_number:'',
   skills:[],
   bio:''
@@ -71,24 +71,22 @@ const usercontext=useContext(UserContext)
     const updateProfile=async(e)=>{
       e.preventDefault()
       try{
-        if(formData.name==="" || formData.email==="" || formData.phone_number==="" || formData.bio==="" || formData.skills.length===0){
+        if(formData.name==="" || formData.phone_number==="" || formData.bio==="" || formData.skills.length===0){
           toast.error('Please fill all the fields')
           return
         }
         const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/update/profile`
         const headers={
          'Content-type':'application/json',
-         'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+         'Authorization': `Bearer ${Cookies.get('userToken')}`
         }
         const updatedData={
           fullName:formData.name,
-          email:formData.email,
           phone_number:formData.phone_number,  
           bio:formData.bio,
           skills:formData.skills.split(',').map(skill=>skill.trim())
         }
         const response=await axios.put(url,updatedData,{headers})
-        console.log(response)
         if(response.status===200 || response.statusText==='OK'){
           
             toast.success('Profile Updated Successfully')
@@ -100,7 +98,6 @@ const usercontext=useContext(UserContext)
             usercontext.setIsProfileComplete(true)
             setformData({
               name:'',
-              email:'',
               phone_number:'',
               skills:[],
               bio:''
@@ -118,6 +115,7 @@ const usercontext=useContext(UserContext)
         <Header />
         <div className='profile-section-container'>
           <h1 className="profile-heading">Complete Your profile</h1>
+          {usercontext.isProfileComplete===false ?<>
             <form className="profile-form" onSubmit={updateProfile}>
               <label htmlFor="fullName" className="profile-label">Full Name</label>
             <input type="text" className='profile-input' placeholder='Full Name' onChange={e=>setformData({...formData,name:e.target.value})} value={formData.name}/>
@@ -126,14 +124,21 @@ const usercontext=useContext(UserContext)
             <label htmlFor="phone" className="profile-label">Phone Number</label>
             <input type="tel" className='profile-input' placeholder='Phone Number Ex: +919876543210' 
             pattern="^(?:\+91|0)?[6-9]\d{9}$" maxLength='14' onChange={e=>setformData({...formData,phone_number:e.target.value})} value={formData.phone_number}/>
-            <label htmlFor="email" className="profile-label">Email:</label>
-            <input type="email" className='profile-input' placeholder='Email' onChange={e=>setformData({...formData,email:e.target.value})} value={formData.email}/>
             <label htmlFor="skills" className="profile-label">Skills:</label>
             <input type="text" className='profile-input' placeholder='Skills (comma separated)' onChange={e=>setformData({...formData,skills:e.target.value})} value={formData.skills}/>
             {/*<input type="file" className="Upload-resume" onChange={handleFileChange} accept="application/pdf application/doc application/docx"/>
              <br />*/}
              <button type='submit' className='profile-save-btn'>Update</button>
             </form>
+            </>: <>
+                            <div className='recruiter-completed-container'>
+                            <div className="card-container-recruiter-form">
+                                <img src={circle} alt="profile-completed" className="profile-completed-icon"/>                  
+                                <h3 className="recruiter-form-heading">Profile Completed</h3>
+                                <p className="recruiter-form-description">You have successfully completed your profile</p>
+                            </div>
+                            </div>
+                            </>}
       {/*<button
         onClick={handleUploadClick}
         disabled={!file || isUploading}

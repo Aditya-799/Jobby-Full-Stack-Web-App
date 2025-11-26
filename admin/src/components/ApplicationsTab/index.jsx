@@ -1,25 +1,28 @@
-import {Plus, Search,Check,X} from 'lucide-react';
+import {Plus, Search,Check,X, Filter} from 'lucide-react';
 import {useEffect,useState} from 'react'
 import axios from 'axios'
-import lockImage from '../assets/lock.png'
+import lockImage from '../../assets/lock.png'
 import Cookies from 'js-cookie'
 import './index.css'
 
 const ApplicationsTab=(props)=> {
-const {jobType, changeType} = props;
 const [applicantsData, setApplicantsData] = useState([]);
+const [searchItem, setSearchItem] = useState('');
+const [jobTypeLocal, setJobTypeLocal] = useState('All Types');
+const [filteredJobs, setFilteredJobs] = useState([]);
 
 const getAllJobs=async()=>{
     try{
         const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/allapplicants`
         const headers={
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+            'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
         }
         const response=await axios.get(url,{headers})
         const data=response.data
         console.log(data)
         setApplicantsData(data)
+        setFilteredJobs(data)
     }
     catch(error){
         console.error(error)
@@ -33,7 +36,7 @@ const Jobaction=async (action,userId,jobId)=>{
         const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/accept/applicant/job/`
         const headers={
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+            'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
         }
         const body={
             action:action,
@@ -45,7 +48,7 @@ const Jobaction=async (action,userId,jobId)=>{
         if(response.status===200){
             const data=response.data
             console.log(data)
-            windiow.location.reload()
+            window.location.reload()
         }
     }
     catch(error){
@@ -53,9 +56,45 @@ const Jobaction=async (action,userId,jobId)=>{
     }
 }
 
+const getDataBysearch=(e)=>{
+    const searchTerm = e.target.value.toLowerCase();
+    setSearchItem(searchTerm);
+    let data = applicantsData;
+    data = data.filter((job) =>
+        job.jobtitle.toLowerCase().includes(searchItem.toLowerCase())
+      );
+    setFilteredJobs(data);
+}
+
+const FilterData = (e) => {
+    const type = e.target.value;
+    setJobTypeLocal(type);
+
+    let data = applicantsData;
+
+    if (type === "Internships") {
+      data = data.filter((job) =>
+        job.jobtype.toLowerCase() === "Internship".toLowerCase()
+      );
+    } else if (type === "Jobs") {
+      data = data.filter((job) =>
+        job.jobtype.toLowerCase() === "Full-time".toLowerCase() || job.jobtype.toLowerCase() === "Part-time".toLowerCase()
+      );
+    }
+
+    if (searchItem !== "") {
+      data = data.filter((job) =>
+        job.jobtitle.toLowerCase().includes(searchItem.toLowerCase())
+      );
+    }
+
+    setFilteredJobs(data);
+  };
+
+
 useEffect(()=>{
 if(props.isProfileCompleted)getAllJobs()
-},[])
+},[props.isProfileCompleted])
 
 return (
     <div className="as-content">
@@ -66,9 +105,9 @@ return (
                         <div className="menu-jobpostings">
                             <div className="asc-search-container">
                                 <Search className="search-icon" />
-                                <input type="search" className="Search-bar-job-postings" placeholder='Search Applications...'/>
+                                <input type="search" className="Search-bar-job-postings" placeholder='Search Applications...' onChange={getDataBysearch}/>
                             </div>
-                            <select className="asc-dropdown asc-search-container" onChange={changeType} value={jobType}>
+                            <select className="asc-dropdown asc-search-container" onChange={FilterData} value={jobTypeLocal}>
                                 <option className="asc-option">All Types</option>
                                 <option className="asc-option">Jobs</option>
                                 <option className="asc-option">Internships</option>
@@ -85,7 +124,7 @@ return (
                                     <th className="table-heading">Actions</th>
                                 </tr>
                                 {
-                                applicantsData.map((each)=>(
+                                filteredJobs.map((each)=>(
                                     <tr className="table-line" key={each.id}>
                                     <td className="table-heading title">
                                         <div className="role-container">
@@ -109,7 +148,7 @@ return (
                                 </tbody>
                             </table>
                         </div>
-                        </> : <div className="profile-completed-menu-job-postings">
+                        </> : <div className="profile-not-completed menu-job-postings">
                             <img src={lockImage} alt="profile not completed" className="profile-not-completed-image" />
                             <p className="profile-not-completed-description">Complete your profile to view applications</p>
                         </div>}

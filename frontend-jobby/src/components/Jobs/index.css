@@ -4,13 +4,14 @@
     font-family: 'Roboto';
     box-sizing: border-box;
   }
-  .jobs-bg-container{
-    min-width: 100vw;
-    min-height: 99vh;
-  }
-  .toe {
-    display: none;
-  }
+.jobs-bg-container {
+  display: flex;
+  width:100vw;
+  overflow:hidden;
+  background-color: black;
+  padding-top: 70px;
+  box-sizing: border-box;
+}
   .search-icon-button {
     background-color: transparent;
     border: none;
@@ -21,7 +22,7 @@
     border-radius: 4px;
     width: 100%;
     max-width: 300px;
-    margin-top: 20px;
+    margin-top: 30px;
   }
   .all-cards-container {
     width: 90%;
@@ -53,6 +54,7 @@
     height: 20px;
     color: white;
   }
+    
   .failure-view-image {
     max-width: 400px;
     width: 100%;
@@ -68,6 +70,10 @@
     padding: 10px;
     justify-content: center;
   }
+  .full-screen{
+    width:100%;
+  }
+
   @media (max-width: 767px) {
     .jobs-bg-container {
       display: flex;
@@ -97,7 +103,7 @@
       margin-top: 20px;
     }
     .jobs-inner-container{
-      overflow-y:auto;
+      overflow:hidden;
     }
     .search-container {
       display: none;
@@ -109,6 +115,7 @@
       background-color: black;
       background-size: cover;
       min-height: 100vh;
+      width:100vw;
       padding: 20px;
     }
     .jobs-inner-container {
@@ -117,15 +124,16 @@
     }
     .jobs-section-container {
       width: 70%;
-      display: flex;
-      flex-direction: column;
-      overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
     }
     .loader-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100%;
+      height: 100vh;
       width: 100%;
     }
   }

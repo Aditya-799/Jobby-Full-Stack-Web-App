@@ -1,6 +1,7 @@
 import User from "../models/Users.js"
 import Job from "../models/Job.js"
 
+
 export const getUserProfile = async (req, res) => {
     try {
         // req.user contains the authenticated user's information
@@ -19,8 +20,8 @@ export const getUserProfile = async (req, res) => {
 
 export const updateProfile=async (req,res)=>{
     try{
-        const {fullName,email,bio,skills,phone}=req.body
-        const allowedFields=['phone','fullName','email','bio','skills']
+        const {fullName,bio,skills,phone}=req.body
+        const allowedFields=['phone','fullName','bio','skills']
         const updateData={}
         for(const field in req.body){
             if(allowedFields.includes(field)){
@@ -41,7 +42,6 @@ export const updateProfile=async (req,res)=>{
           // 6. Return the updated user object (excluding the password).
           res.status(200).json({
             _id: updatedUser._id,
-            email: updatedUser.email,
             bio: updatedUser.bio,
             skills: updatedUser.skills,
             profilePic: updatedUser.profilePic
@@ -218,3 +218,4 @@ export const getRejectedJobs=async(req,res)=>{
         console.log(error)
     }
 }
+

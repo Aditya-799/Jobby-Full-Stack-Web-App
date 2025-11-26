@@ -1,7 +1,7 @@
 import {useState,useEffect,useContext} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {GridLoader} from 'react-spinners'
-import {UserContext} from '../../Context/UserContext'
+import {UserContext} from '../../Context/createContext'
 import exclamation from '../../assets/exclamation.png'
 import Cookies from 'js-cookie'
 import './index.css'
@@ -25,7 +25,7 @@ const ProfileContainer =()=> {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get('jwtToken')}`,
+          Authorization: `Bearer ${Cookies.get('userToken')}`,
         }
       }
     )

@@ -20,7 +20,7 @@ const Jobs = (props) => {
 
    useEffect(()=>{
       getJobs()
-   },[])
+},[minimumPackage,employmentType])
 
    const changedInput = event => {
      setSearchInput(event.target.value)
@@ -46,10 +46,6 @@ const Jobs = (props) => {
     
   }
 
-  useEffect(()=>{
-    getJobs()
-  },[minimumPackage,employmentType])
-
   const getUpdatedList = () => {
     const filteredData = jobsList.filter(eachItem =>
       eachItem.title.toLowerCase().includes(searchInput.toLowerCase()),
@@ -60,7 +56,7 @@ const Jobs = (props) => {
  const getJobs = async () =>{
     const employementlist=employmentType.trim().split(',')
     const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/alljobs?search_q=${searchInput}&minimum_package=${minimumPackage}&employementType=${employementlist}`
-    const jwtToken = Cookies.get('jwtToken')
+    const jwtToken = Cookies.get('userToken')
     const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -95,7 +91,7 @@ const Jobs = (props) => {
   }
 
   const renderLoader = () => (
-    <div className="loader-container" data-testid="loader">
+    <div className="loader-container full-screen">
       <GridLoader color="#ffffff" height="50" width="50" />
     </div>
   )
@@ -137,7 +133,7 @@ const Jobs = (props) => {
     const newData = updatedList.length === 0 ? jobsList : updatedList
     return (
       <>
-        <Header />
+        <Header className='header'/>
         <div className="jobs-bg-container">
           <div className="jobs-inner-container">
             <div className="search-container">
@@ -170,9 +166,6 @@ const Jobs = (props) => {
               />
               </div>
               </div>
-           
-          <h1 className="toe">Type of Employment</h1>
-          <h1 className="toe">Salary Range</h1>
           
             <div className="jobs-section-container">
             <div className="search-container1">

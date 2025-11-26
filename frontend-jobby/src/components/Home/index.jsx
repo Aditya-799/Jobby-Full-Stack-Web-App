@@ -1,5 +1,4 @@
 import {Link} from 'react-router-dom'
-import { ToastContainer,toast,Bounce } from 'react-toastify'
 import Header from '../Header'
 import './index.css'
 

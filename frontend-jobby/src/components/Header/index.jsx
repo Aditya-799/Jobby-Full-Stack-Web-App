@@ -2,7 +2,7 @@ import { MdHome, MdExitToApp } from 'react-icons/md'
 import { BsFillBriefcaseFill } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
-import { UserContext } from '../../Context/UserContext'
+import { UserContext } from '../../Context/createContext'
 import Cookies from 'js-cookie'
 import './index.css'
 
@@ -11,7 +11,7 @@ const Header = () => {
   const { setUserData, setIsProfileComplete } = useContext(UserContext)
 
   const handleLogout = () => {
-    Cookies.remove('jwtToken')
+    Cookies.remove('userToken')
     setUserData({});
     setIsProfileComplete(false);
     localStorage.removeItem('userData');

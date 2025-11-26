@@ -1,5 +1,5 @@
 import express from "express"
-import { signup, login, logout, getCurrentUser } from "../controllers/authController.js"
+import { signup, login, logout, getCurrentUser,sendOtp,verifyOtp } from "../controllers/authController.js"
 import { protectRoute } from "../middleware/authMiddleware.js"
 
 const router=express.Router()
@@ -12,6 +12,9 @@ router.post('/logout',logout)
 
 router.get('/me', protectRoute, getCurrentUser)
 
+router.post('/sendOtp',sendOtp)
+
+router.post('/verifyOtp',verifyOtp)
 
 export default router 
 

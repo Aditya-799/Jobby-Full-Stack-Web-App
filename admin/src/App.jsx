@@ -1,8 +1,7 @@
-import AdminFolder from "./AdminFolder";
-import { ToastContainer,toast,Bounce } from "react-toastify";
-import {Routes,Route,useNavigate} from 'react-router-dom'
-import Cookies from 'js-cookie'
-import {useEffect} from 'react'
+import AdminFolder from "./components/AdminFolder";
+import { ToastContainer,Bounce } from "react-toastify";
+import {Routes,Route} from 'react-router-dom'
+import ProtectRoute from "./components/ProtectRoute";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -22,7 +21,7 @@ function App() {
           transition={Bounce}
           />
           <Routes>
-            <Route path="/" element={<AdminFolder />} />
+                <Route path="/" element={<ProtectRoute><AdminFolder /></ProtectRoute>} />
           </Routes>
     </>
   )

@@ -2,11 +2,9 @@ import {useState,useEffect} from 'react'
 import JobsPosted from '../JobsPosted'
 import ApplicationsTab from '../ApplicationsTab'
 import RecruiterForm from '../RecruiterForm'
-import SettingsTab from '../Settings'
-import FormDialog from '../Modal';
 import Cookies from 'js-cookie'
 import axios from 'axios'
-import {  Settings, Briefcase, FileText,Search, Plus,User} from 'lucide-react';
+import { Briefcase, FileText,LogOut,User} from 'lucide-react';
     import './index.css'
 
     const AdminFolder=()=> {
@@ -18,7 +16,7 @@ import {  Settings, Briefcase, FileText,Search, Plus,User} from 'lucide-react';
             const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/isrecruiterverified`
             const headers={
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+                'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
             }
             const response=await axios.get(url,{headers})
             if(response.status===200 || response.statusText==='OK'){
@@ -32,20 +30,21 @@ import {  Settings, Briefcase, FileText,Search, Plus,User} from 'lucide-react';
             getProfile()
         },[])
 
-        const Jobs=()=>{
-            setActiveOption("Jobs")
+        const routetologin = () => {
+            Cookies.remove('recruiterToken')
+            window.location.replace('http://localhost:5174/login')
         }
 
-        const Internships=()=>{
-            setActiveOption("Internships")
+        const Jobs=()=>{
+            setActiveOption("Jobs")
         }
 
         const Applications=()=>{
             setActiveOption("Applications")
         }
 
-        const Settingstab=()=>{
-            setActiveOption("Settings")
+        const Logouttab=()=>{
+            setActiveOption("Logout")
         }
 
         const changeType=(event)=>{
@@ -73,9 +72,11 @@ import {  Settings, Briefcase, FileText,Search, Plus,User} from 'lucide-react';
                                 <User className="as-icons"/>
                                 <p className="as-sideheading">Profile</p>
                             </li>
-                            <li className={`as-sidebar-items ${activeOption==="Settings"? "active":""}`} onClick={Settingstab}>
-                                <Settings className="as-icons"/> 
-                                <p className="as-sideheading">Settings</p>
+                            <li className={`as-sidebar-items ${activeOption==="Logout"? "active":""}`} onClick={Logouttab}>
+                                <button onClick={() => routetologin()} className="asc-logout-button">
+                                    <LogOut className="as-icons"/> 
+                                    <p className="as-sideheading">Logout</p>
+                                </button>
                             </li>  
                         </ul>
                     </div>
@@ -83,8 +84,6 @@ import {  Settings, Briefcase, FileText,Search, Plus,User} from 'lucide-react';
                      {activeOption==="Jobs" && <JobsPosted jobType={jobType} changeType={changeType} isProfileCompleted={isProfileCompleted}/>}
                      {activeOption==="Applications" && <ApplicationsTab jobType={jobType} changeType={changeType}  isProfileCompleted={isProfileCompleted}/>}
                     {activeOption==="Profile" && <RecruiterForm isProfileCompleted={isProfileCompleted}/> }
-                    {activeOption==="Settings" && <SettingsTab/>}
-
                 </div>
             )
         }

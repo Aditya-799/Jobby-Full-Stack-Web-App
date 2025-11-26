@@ -1,8 +1,9 @@
 import User from "../models/Users.js"
 import Recruiter from "../models/recruiters.js"
+import Otp from "../models/Otp.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-
+import sendEmailOtp from "./emailcontroller.js"
 
 export async function signup(req, res) {
     const { fullName, email, password, role} = req.body;
@@ -133,8 +134,6 @@ export async function signup(req, res) {
       res.status(500).json({ message: error.message });
     }
   }
-
-  /// Add recruiter Logout
   
   export async function logout(req, res) {
     res.clearCookie("jwt", {
@@ -167,5 +166,39 @@ export async function getCurrentUser(req, res) {
   } catch (error) {
     console.error("Error getting current user:", error);
     res.status(401).json({ message: "Invalid token" });
+  }
+}
+
+export async function sendOtp(req,res){
+  try{
+    const {email}=req.body
+    const otp=parseInt(100000 *Math.random());
+    const ispresent=await Otp.findOne({email})
+    if(ispresent){
+      return res.status(400).json({message:"Otp already sent"})
+    }
+    await Otp.create({email,otp})
+    await sendEmailOtp(email,otp)
+    res.status(200).json({success:true,otp})
+  }
+  catch(error){
+    console.log('Error sending otp',error.message)
+    res.status(500).json({message:error.message})
+  }
+}
+
+export const verifyOtp=async(req,res)=>{
+  try{
+    const {email,otp}=req.body
+    const record=await Otp.findOne({email})
+
+    if(!record || record.otp!==otp){
+      return res.status(400).json({message:"Invalid Otp"})
+    }
+    return res.status(201).json({success:true});
+  }
+  catch(error){
+    console.log('Error sending otp',error.message)
+    res.status(500).json({message:error.message})
   }
 }

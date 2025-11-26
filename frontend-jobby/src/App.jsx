@@ -1,7 +1,7 @@
 import Signup from './components/Signup'
 import Login from './components/Login'
 import ProtectedRoute from './components/ProtectedRoute'
-import { ToastContainer,toast,Bounce } from "react-toastify";
+import { ToastContainer,Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {Routes, Route } from 'react-router-dom'
 import JobItemDetails from './components/JobItemDetails'
@@ -9,7 +9,6 @@ import ProfileSection from './components/ProfileSection'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
 import AppliedJobsSection from './components/AppliedJobsSection'
-/*import ProfileSection from './components/ProfileSection'*/
 import Jobs from './components/Jobs'
 import './App.css'
 const employmentTypesList = [
@@ -71,7 +70,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<ProtectedRoute/>} />
-            <Route path='/home' element={<Home/>} />
+            <Route path='/home' element={<ProtectedRoute><Home/></ProtectedRoute>} />
             <Route path='/jobs' element={<Jobs employmentTypesList={employmentTypesList} salaryRangesList={salaryRangesList} />} />
             <Route path='/jobs/:id' element={<JobItemDetails/>} />
             <Route path='/profile/section' element={<ProfileSection/>} />

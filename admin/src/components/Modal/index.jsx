@@ -4,7 +4,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { ToastContainer,toast,Bounce } from "react-toastify";
+import {toast} from "react-toastify";
 import {useState,useEffect} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'
@@ -16,7 +16,6 @@ export default function FormDialog({open,handleClose,dialog,data,fetchData}) {
  
 const [formData,setformData]=useState({
   position:'',
-  company_name:'',
   location:'',
   description:'',
   salary:'',
@@ -29,7 +28,7 @@ const [formData,setformData]=useState({
 
 useEffect(()=>{
   if(data){
-    setformData({company_name:data.company_name,
+    setformData({
     position:data.title,
     location:data.location,
     description:data.job_description,
@@ -52,10 +51,9 @@ const handleUpdate= async (jobId)=>{
     const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/update/job/${jobId}`
     const headers={
       "Content-Type":"application/json",
-      'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+      'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
     }
     const data={
-      company_name:formData.company_name,
       title:formData.position,
       location:formData.location,
       job_description:formData.description,
@@ -85,10 +83,9 @@ const handleUpdate= async (jobId)=>{
   const handleSubmit = async (event) => {
     event.preventDefault();
     try{
-    const formDatadefault = new FormData(event.currentTarget);
-    const formJson = Object.fromEntries(formDatadefault.entries())
+    //const formDatadefault = new FormData(event.currentTarget);
+    //const formJson = Object.fromEntries(formDatadefault.entries())
     const newData={
-      company_name:formData.company_name,
       title:formData.position,
       location:formData.location,
       job_description:formData.description,
@@ -100,7 +97,7 @@ const handleUpdate= async (jobId)=>{
 
     const headers={
       'Content-Type':'application/json',
-      'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+      'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
     }
     
     const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/createjob`,newData,{headers});
@@ -144,8 +141,6 @@ const handleUpdate= async (jobId)=>{
               fullWidth
               variant="standard"
             />*/}
-            <label htmlFor="name" className="username-heading">Company/Organisation Name</label>
-            <input type="text" name="name"  label="Company/Organisation Name" className="username" value={formData.company_name} onChange={e => setformData({...formData, company_name: e.target.value})} required/>
             <label htmlFor="position" className="username-heading">Job Title</label>
             <input type="text" name="position"  label="Job Title" className="username" value={formData.position} onChange={e => setformData({...formData, position: e.target.value})} required/>
             <label htmlFor="location" className="username-heading">Location</label>

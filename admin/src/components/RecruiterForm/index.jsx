@@ -1,11 +1,8 @@
-
-import {Plus, Search} from 'lucide-react';
-import {useState,useEffect} from 'react';
+import {useState} from 'react';
 import './index.css';
 import Cookies from 'js-cookie'
 import axios from 'axios';
-import FormDialog from '../Modal';
-import circle  from '../assets/circle.png'
+import circle  from '../../assets/circle.png'
 import { toast } from 'react-toastify';
 
 const JobsPosted=(props)=> {
@@ -29,7 +26,7 @@ const updateProfile=async(event)=>{
        const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/update/recruiterprofile`
        const headers={
         'Content-type':'application/json',
-        'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
        }
        const updatedData={
         fullName:formrecruiterData.recruiterName,

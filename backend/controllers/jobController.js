@@ -42,8 +42,12 @@ export const getAllJobs = async (req, res) => {
 export const addJobs=async(req,res)=>{
     try {
         const recruiterId=req.recruiter._id
-        const { title,job_description,location,salary,requirements,jobType,status,company_name}=req.body
-        if(!title || !job_description || !location || !salary || !requirements || !jobType || !status || !company_name){
+        const recruiterdetails=await Recruiter.findById(recruiterId)
+        if(!recruiterdetails){
+            return res.status(404).json({message:"Recruiter not found"})
+        }
+        const { title,job_description,location,salary,requirements,jobType,status}=req.body
+        if(!title || !job_description || !location || !salary || !requirements || !jobType || !status){
             return res.status(400).json({message:"All fields are required"})
         }
         const words=job_description.split(',')
@@ -51,13 +55,14 @@ export const addJobs=async(req,res)=>{
 
         //To check whether the two jobs are posted with same title
         
-        /*const jobs=await Job.find({title:title})
+        const jobs=await Job.find({title:title})
         const ispostedbysameuser=jobs.find(job=>job.recruiter.toString()===req.recruiter._id.toString())
         if(ispostedbysameuser){
             return res.status(400).json({message:"You have already posted a job with this title"})
         }
-        else{
-        */
+        console.log(recruiterdetails)
+        const [company_name,company_logo_url]=[recruiterdetails.companyName,recruiterdetails.companyLogoUrl]
+    
         const job=await Job.create({
             recruiterId:recruiterId,
             title,
@@ -67,6 +72,7 @@ export const addJobs=async(req,res)=>{
             salary,
             requirements,
             company_name,
+            company_logo_url,
             jobType,status})
         
         
@@ -76,7 +82,7 @@ export const addJobs=async(req,res)=>{
             recruiter.Jobsposted.push(job._id)
             await recruiter.save()
         }
-        
+        console.log('Job created successfully',job)
         res.status(201).json(job)
     
     } catch (error) {

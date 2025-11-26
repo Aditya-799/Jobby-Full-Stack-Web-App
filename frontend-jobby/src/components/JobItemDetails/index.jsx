@@ -1,12 +1,11 @@
 import {MdLocationOn} from 'react-icons/md'
 import {FaSuitcase, FaStar, FaExternalLinkAlt,FaArrowLeft} from 'react-icons/fa'
 import {toast} from 'react-toastify'
-import {useState,useEffect,useContext} from 'react'
+import {useState,useEffect} from 'react'
 import Cookies from 'js-cookie'
 import {useNavigate} from 'react-router-dom'  
 import SkillItem from '../SkillItem'
 import {GridLoader} from 'react-spinners'
-import { UserContext } from '../../Context/UserContext'
 import exclamation from '../../assets/exclamation.png'
 import axios from 'axios'
 import Header from '../Header'
@@ -19,40 +18,18 @@ const JobItemDetails = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isFailure, setIsFailure] = useState(false)
   const [totalDetails, setTotalDetails] = useState({})
-  const userContext=useContext(UserContext)
-  /*state = {
-    totalDetails: {},
-    isLoading: true,
-    isFailure: false,
-  }*/
   const navigate = useNavigate()
 
   useEffect(() => {
     getJobDetails()
   }, [])
 
-
-  const convertsimilarJobs = data => {
-    const newData = data.map(eachItem => ({
-      companyLogoUrl: eachItem.company_logo_url,
-      employmentType: eachItem.employment_type,
-      id: eachItem.id,
-      jobDescription: eachItem.job_description,
-      location: eachItem.location,
-      rating: eachItem.rating,
-      title: eachItem.title,
-    }))
-    return newData
-  }
-
-
-
   const getJobDetails = async () => {
     // Alternative method: extract ID from URL directly
     const pathParts = window.location.pathname.split('/')
     const jobId = pathParts[pathParts.length - 1]
     const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/jobdetails/${jobId}`
-    const jwtToken = Cookies.get('jwtToken')
+    const jwtToken = Cookies.get('userToken')
     const response = await axios(url, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -67,6 +44,7 @@ const JobItemDetails = () => {
         companyWebsiteUrl: jsonData.website_url,
         employmentType: jsonData.jobType,
         description: jsonData.description,
+        companyName: jsonData.company_name,
         location: jsonData.location,
         packagePerAnnum: jsonData.salary,
         jobDescription: jsonData.job_description,
@@ -76,14 +54,12 @@ const JobItemDetails = () => {
         lifeAtCompany:jsonData.life_at_company
       }
 
-      /*this.setState({totalDetails: updatedData, isLoading: false})*/
       setTotalDetails(updatedData)
       setIsLoading(false)
       
     }
      
      else {
-      /*this.setState({isFailure: true, isLoading: false})*/
       setIsFailure(true)
       setIsLoading(false)
     }
@@ -101,7 +77,7 @@ const JobItemDetails = () => {
       const pathParts = window.location.pathname.split('/')
     const jobId = pathParts[pathParts.length - 1]
     const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/apply-job/${jobId}`
-    const jwtToken = Cookies.get('jwtToken')
+    const jwtToken = Cookies.get('userToken')
     const response = await axios.post(url,{}, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -144,7 +120,7 @@ const JobItemDetails = () => {
 
 
   const renderLoader = () => (
-    <div className="loader-container full-screen" data-testid="loader">
+    <div className="loader-container full-screen">
       <GridLoader color="#ffffff" height="50" width="50" />
     </div>
   )
@@ -153,7 +129,6 @@ const JobItemDetails = () => {
   }
 
   const renderContext = () => {
-    /*const {totalDetails} = this.state*/
     const {
       companyLogoUrl,
       companyWebsiteUrl,
@@ -164,6 +139,7 @@ const JobItemDetails = () => {
       rating,
       skills = [],
       title,
+      companyName,
       lifeAtCompany
     } = totalDetails
     return (
@@ -182,7 +158,8 @@ const JobItemDetails = () => {
                 className="company-icon"
               />
               <div>
-                <h1 className="jid-job-name1">{title}</h1>
+              <h2 className="jid-job-name1">{companyName}</h2>
+                <h2 className="jid-job-name1 pack"> Role: {title}</h2>
                 <div className="rating-container">
                   <FaStar className="star-icon" />
                   <p className="rating-value">{rating}</p>
@@ -208,7 +185,7 @@ const JobItemDetails = () => {
             <div className="description-container">
               <h1 className="jid-job-name">Description</h1>
               {
-                userContext.isProfileComplete===false ? (<div className='jid-error-container-disabled'><button className='logout-button-disabled'>Apply</button>
+                JSON.parse(localStorage.getItem('isProfileComplete'))===false ? (<div className='jid-error-container-disabled'><button className='logout-button-disabled'>Apply</button>
                 <div className='jid-inner-error-container'><img src={exclamation} alt='error-logo' className='error-icon'/><p className="jid-error">Complete your profile to apply</p></div></div>) :(<button className='logout-button' onClick={ApplyJob}>Apply</button>)
               }
               
@@ -251,8 +228,6 @@ const JobItemDetails = () => {
     )
   }
 
-  //render() {
-    //const {isLoading, isFailure} = this.state
     return (
       <>
         <Header />
