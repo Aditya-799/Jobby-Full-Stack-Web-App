@@ -1,4 +1,4 @@
-import {Plus, Search,Check,X, Filter} from 'lucide-react';
+import {Plus, Search,Check,X, Eye} from 'lucide-react';
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 import lockImage from '../../assets/lock.png'
@@ -20,7 +20,6 @@ const getAllJobs=async()=>{
         }
         const response=await axios.get(url,{headers})
         const data=response.data
-        console.log(data)
         setApplicantsData(data)
         setFilteredJobs(data)
     }
@@ -54,6 +53,11 @@ const Jobaction=async (action,userId,jobId)=>{
     catch(error){
         console.error(error)
     }
+}
+
+const viewResume=(userId)=>{
+    const url=applicantsData.filter(each=>each.userId===userId)
+    window.open(url[0].resumeUrl)
 }
 
 const getDataBysearch=(e)=>{
@@ -141,6 +145,7 @@ return (
                                     <td className="table-heading data"><div className="">
                                         <Check className="check-icon" onClick={()=>(Jobaction('accept',each.userId,each.id))}/>
                                         <X className="cross-icon" onClick={()=>(Jobaction('reject',each.userId,each.id))}/>
+                                        <Eye className='cross-icon'onClick={()=>(viewResume(each.userId))}/>
                                         </div></td>
                                 </tr>
                                 ))

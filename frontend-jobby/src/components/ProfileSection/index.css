@@ -1,6 +1,6 @@
 .profile-section-container{
     width:100vw;
-    height:90vh;
+    min-height:90vh;
      padding-bottom: 20px;
     background-color: #000000;
     padding:30px;

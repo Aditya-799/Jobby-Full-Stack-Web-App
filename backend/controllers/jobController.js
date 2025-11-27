@@ -198,7 +198,7 @@ export const getallApplicants=async(req,res)=>{
             const applicants=await User.find({_id:{$in:userIds}})
             if(applicants.length==0) continue
             for(let applicant of applicants){
-                finaljobs.push({id:each._id,userId:applicant._id,name:applicant.fullName,email:applicant.email,phone:applicant.phone,jobtitle:each.title,jobtype:each.jobType})
+                finaljobs.push({id:each._id,userId:applicant._id,name:applicant.fullName,email:applicant.email,phone:applicant.phone,jobtitle:each.title,jobtype:each.jobType,resumeUrl:applicant.resumeUrl})
             }
         }
         return res.status(200).json(finaljobs)

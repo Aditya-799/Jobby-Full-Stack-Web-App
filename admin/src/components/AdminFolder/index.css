@@ -21,7 +21,7 @@
     background-color:black;
     padding:30px;
     background-size:cover;
-    min-height:100vh;
+    height:100vh;
 }
 .as-heading{
     font-size:24px;

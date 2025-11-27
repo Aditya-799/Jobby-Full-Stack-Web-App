@@ -82,7 +82,6 @@ const fetchData = async () => {
     const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/jobspostedbyrecruiter`;
     const response = await axios.get(url, { headers });
     const data=response.data
-    console.log(data)
     setJobsData(data)
     setFilteredJobs(data)
   }

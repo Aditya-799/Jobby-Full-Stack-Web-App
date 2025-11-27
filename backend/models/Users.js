@@ -10,8 +10,7 @@ const userSchema = new mongoose.Schema({
     skills: { type: [String], required: false },
     profilePic: { type: String, required: true },
     phone: { type: String, required: false },
-    resume: { type: String, default: null },
-    resumePath: { type: String, default: null },
+    resumeUrl: { type: String, default: null },
     isProfileComplete: { type: Boolean, default: false },
     phone: { type: String, required: false },
     Appliedjobs:[{
