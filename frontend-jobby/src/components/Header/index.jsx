@@ -76,7 +76,7 @@ const Header = () => {
           Signin
         </button>
         </Link>
-        <Link>
+        <Link to="/signup" className="nav-item">
         <button type="button" className="logout-button" onClick={handleLogout}>
           Signup
         </button>
