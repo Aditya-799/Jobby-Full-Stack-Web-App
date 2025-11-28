@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import './index.css'
 
 const totalLabel = [
@@ -27,7 +27,7 @@ const totalLabel = [
 const Filters = (props) => {
   const [initial, setInitial] = useState(totalLabel)
   const [salaryRange, setSalaryRange] = useState('')
-  const {sendList,salaryChange} = props
+  const { sendList, salaryChange } = props
 
   const filterlabel = label => {
     const updatedList = initial.map(eachItem => ({
@@ -40,17 +40,17 @@ const Filters = (props) => {
     const selectedIds = updatedList
       .filter(item => item.isLabelPresent)
       .map(item => item.employmentTypeId)
-    sendList(selectedIds.join(',')) 
+    sendList(selectedIds.join(','))
     setInitial(updatedList)
   }
 
-  const handleFilters=()=>{
-    
+  const handleFilters = () => {
+
     salaryChange('')
     setInitial(totalLabel)
     setSalaryRange('')
     sendList('')
-    
+
   }
 
   const changedsalaryRange = salary => {
@@ -58,49 +58,49 @@ const Filters = (props) => {
     salaryChange(salary)
   }
 
-  
-    const { salaryRangesList} = props
-    return (
-      <div className="filter-container">
-        <hr className="line" />
-        <h1 className="f-heading">Type of Employment</h1>
-        <ul>
-          {initial.map(eachItem => (
-            <li className="check-box-container" key={eachItem.employmentTypeId}>
-              <button
-                className="new-button"
-                type="button"
-              >
-                <input type="checkbox" className="checkbox"
-                 value={eachItem.employmentTypeId}
-                 checked={eachItem.isLabelPresent}
-                 onChange={() => filterlabel(eachItem.employmentTypeId)}
-                />
-              </button>
-              <p className="job-type">{eachItem.label}</p>
-            </li>
-          ))}
-        </ul>
-        <hr className="line" />
-        <h1 className="f-heading">Salary Range</h1>
-        <ul>
-          {salaryRangesList.map(eachItem => (
-            <li className="check-box-container" key={eachItem.salaryRangeId}>
-              <input
-                type="radio"
-                className="checkbox"
-                name="salaryRangeButton"
-                value={eachItem.salaryRangeId}
-                checked={eachItem.salaryRangeId===salaryRange}
-                onChange={() => changedsalaryRange(eachItem.salaryRangeId)}
+
+  const { salaryRangesList } = props
+  return (
+    <div className="filter-container">
+      <hr className="line" />
+      <h1 className="f-heading">Type of Employment</h1>
+      <ul>
+        {initial.map(eachItem => (
+          <li className="check-box-container" key={eachItem.employmentTypeId}>
+            <button
+              className="new-button"
+              type="button"
+            >
+              <input type="checkbox" className="checkbox"
+                value={eachItem.employmentTypeId}
+                checked={eachItem.isLabelPresent}
+                onChange={() => filterlabel(eachItem.employmentTypeId)}
               />
-              <p className="job-type">{eachItem.label}</p>
-            </li>
-          ))}
-        </ul>
-        <button type="reset" className='clearFiltersButton' onClick={handleFilters}>Clear Filters</button>
-      </div>
-    )
+            </button>
+            <p className="job-type">{eachItem.label}</p>
+          </li>
+        ))}
+      </ul>
+      <hr className="line" />
+      <h1 className="f-heading">Salary Range</h1>
+      <ul>
+        {salaryRangesList.map(eachItem => (
+          <li className="check-box-container" key={eachItem.salaryRangeId}>
+            <input
+              type="radio"
+              className="checkbox"
+              name="salaryRangeButton"
+              value={eachItem.salaryRangeId}
+              checked={eachItem.salaryRangeId === salaryRange}
+              onChange={() => changedsalaryRange(eachItem.salaryRangeId)}
+            />
+            <p className="job-type">{eachItem.label}</p>
+          </li>
+        ))}
+      </ul>
+      <button type="reset" className='clearFiltersButton' onClick={handleFilters}>Clear Filters</button>
+    </div>
+  )
 }
 
 

@@ -1,6 +1,6 @@
-import {useState,useEffect} from 'react'
-import {GridLoader} from 'react-spinners'
-import {BsSearch} from 'react-icons/bs'
+import { useState, useEffect } from 'react'
+import { GridLoader } from 'react-spinners'
+import { BsSearch } from 'react-icons/bs'
 import Cookies from 'js-cookie'
 import ProfileContainer from '../ProfileContainer'
 import CardContainer from '../CardContainer'
@@ -10,21 +10,21 @@ import Header from '../Header'
 import './index.css'
 
 const Jobs = (props) => {
-   const [isLoading,setIsLoading]=useState(true)
-   const [jobsList,setJobsList]=useState([])
-   const [searchInput,setSearchInput]=useState('')
-   const [minimumPackage,setMinimumPackage]=useState('')
-   const [employmentType,setEmploymentType]=useState('')
-   const [isFailure,setIsFailure]=useState(false)
-   const [updatedList,setUpdatedList]=useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [jobsList, setJobsList] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [minimumPackage, setMinimumPackage] = useState('')
+  const [employmentType, setEmploymentType] = useState('')
+  const [isFailure, setIsFailure] = useState(false)
+  const [updatedList, setUpdatedList] = useState([])
 
-   useEffect(()=>{
-      getJobs()
-},[minimumPackage,employmentType])
+  useEffect(() => {
+    getJobs()
+  })
 
-   const changedInput = event => {
-     setSearchInput(event.target.value)
-   }
+  const changedInput = event => {
+    setSearchInput(event.target.value)
+  }
 
   const convertTocamelCase = data => {
     const newData = data.map(eachItem => ({
@@ -32,18 +32,18 @@ const Jobs = (props) => {
       employmentType: eachItem.jobType,
       id: eachItem._id,
       jobDescription: eachItem.description,
-      Requirements:eachItem.requirements,
+      Requirements: eachItem.requirements,
       location: eachItem.location,
       packagePerAnnum: eachItem.salary,
       rating: eachItem.rating,
       title: eachItem.title,
-      jobApplicants:eachItem.jobApplicants,
-      status:eachItem.status
+      jobApplicants: eachItem.jobApplicants,
+      status: eachItem.status
     }))
     setIsLoading(false)
     setJobsList(newData)
     setUpdatedList(newData)
-    
+
   }
 
   const getUpdatedList = () => {
@@ -53,8 +53,8 @@ const Jobs = (props) => {
     setUpdatedList(filteredData)
   }
 
- const getJobs = async () =>{
-    const employementlist=employmentType.trim().split(',')
+  const getJobs = async () => {
+    const employementlist = employmentType.trim().split(',')
     const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/alljobs?search_q=${searchInput}&minimum_package=${minimumPackage}&employementType=${employementlist}`
     const jwtToken = Cookies.get('userToken')
     const response = await axios.get(url, {
@@ -63,11 +63,11 @@ const Jobs = (props) => {
         'Content-Type': 'application/json',
       }
     })
-    if(response.status===200 || response.statusText==='OK'){
-      const {data}=response
+    if (response.status === 200 || response.statusText === 'OK') {
+      const { data } = response
       convertTocamelCase(data)
     }
-    else{
+    else {
       console.log("error")
       setIsLoading(false)
       setIsFailure(true)
@@ -77,14 +77,14 @@ const Jobs = (props) => {
   const searched = event => {
     event.preventDefault()
     getUpdatedList();
-    
+
   }
 
 
   const salaryChange = salary => {
     setMinimumPackage(salary)
   };
-  
+
 
   const sendList = labelsList => {
     setEmploymentType(labelsList)
@@ -129,82 +129,82 @@ const Jobs = (props) => {
     </div>
   )
 
-    const {employmentTypesList=[], salaryRangesList=[]} = props
-    const newData = updatedList.length === 0 ? jobsList : updatedList
-    return (
-      <>
-        <Header className='header'/>
-        <div className="jobs-bg-container">
-          <div className="jobs-inner-container">
-            <div className="search-container">
-              <input
-                type="search"
-                className="search-box"
-                onChange={changedInput}
-                value={searchInput}
-                placeholder="Search"
-              />
-              <div className="search-icon-container">
-                <button
-                  type="button"
-                  data-testid="searchButton"
-                  className="search-icon-button"
-                  onClick={searched}
-                >
-                  <BsSearch className="search-icon" />
-                </button>
-              </div>
+  const { employmentTypesList = [], salaryRangesList = [] } = props
+  const newData = updatedList.length === 0 ? jobsList : updatedList
+  return (
+    <>
+      <Header className='header' />
+      <div className="jobs-bg-container">
+        <div className="jobs-inner-container">
+          <div className="search-container">
+            <input
+              type="search"
+              className="search-box"
+              onChange={changedInput}
+              value={searchInput}
+              placeholder="Search"
+            />
+            <div className="search-icon-container">
+              <button
+                type="button"
+                data-testid="searchButton"
+                className="search-icon-button"
+                onClick={searched}
+              >
+                <BsSearch className="search-icon" />
+              </button>
             </div>
-            
-              <div className="profile-and-filters">
-              <ProfileContainer />
-              <Filters
-                employmentTypesList={employmentTypesList}
-                salaryRangesList={salaryRangesList}
-                sendList={sendList}
-                salaryChange={salaryChange}
-              />
-              </div>
-              </div>
-          
-            <div className="jobs-section-container">
-            <div className="search-container1">
-              <input
-                type="search"
-                className="search-box"
-                onChange={changedInput}
-                value={searchInput}
-                placeholder="Search"
-              />
-              <div className="search-icon-container">
-                <button
-                  type="button"
-                  data-testid="searchButton"
-                  className="search-icon-button"
-                  onClick={searched}
-                >
-                  <BsSearch className="search-icon" />
-                </button>
-              </div>
+          </div>
+
+          <div className="profile-and-filters">
+            <ProfileContainer />
+            <Filters
+              employmentTypesList={employmentTypesList}
+              salaryRangesList={salaryRangesList}
+              sendList={sendList}
+              salaryChange={salaryChange}
+            />
+          </div>
+        </div>
+
+        <div className="jobs-section-container">
+          <div className="search-container1">
+            <input
+              type="search"
+              className="search-box"
+              onChange={changedInput}
+              value={searchInput}
+              placeholder="Search"
+            />
+            <div className="search-icon-container">
+              <button
+                type="button"
+                data-testid="searchButton"
+                className="search-icon-button"
+                onClick={searched}
+              >
+                <BsSearch className="search-icon" />
+              </button>
             </div>
-            {isFailure ? (
-              renderFailureView()
-            ) : isLoading ? (
-              renderLoader()
-            ) : newData.length === 0 ? (
-              rendernotfoundJobs()
-            ) : (
-              <ul className="all-cards-container">
-                {newData.map(eachItem => (
-                  <CardContainer key={eachItem.id} eachItem={eachItem} />
-                ))}
-              </ul>
-            )}
           </div>
-          </div>
-        
-      </>
-    )
-  }
+          {isFailure ? (
+            renderFailureView()
+          ) : isLoading ? (
+            renderLoader()
+          ) : newData.length === 0 ? (
+            rendernotfoundJobs()
+          ) : (
+            <ul className="all-cards-container">
+              {newData.map(eachItem => (
+                <CardContainer key={eachItem.id} eachItem={eachItem} />
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+    </>
+  )
+}
 
 export default Jobs

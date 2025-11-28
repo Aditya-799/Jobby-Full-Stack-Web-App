@@ -1,11 +1,11 @@
-import {MdLocationOn} from 'react-icons/md'
-import {FaSuitcase, FaStar, FaExternalLinkAlt,FaArrowLeft} from 'react-icons/fa'
-import {toast} from 'react-toastify'
-import {useState,useEffect} from 'react'
+import { MdLocationOn } from 'react-icons/md'
+import { FaSuitcase, FaStar, FaExternalLinkAlt, FaArrowLeft } from 'react-icons/fa'
+import { toast } from 'react-toastify'
+import { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
-import {useNavigate} from 'react-router-dom'  
+import { useNavigate } from 'react-router-dom'
 import SkillItem from '../SkillItem'
-import {GridLoader} from 'react-spinners'
+import { GridLoader } from 'react-spinners'
 import exclamation from '../../assets/exclamation.png'
 import axios from 'axios'
 import Header from '../Header'
@@ -25,7 +25,7 @@ const JobItemDetails = () => {
   }, [])
 
   const getJobDetails = async () => {
-    // Alternative method: extract ID from URL directly
+    try{
     const pathParts = window.location.pathname.split('/')
     const jobId = pathParts[pathParts.length - 1]
     const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/jobdetails/${jobId}`
@@ -33,12 +33,12 @@ const JobItemDetails = () => {
     const response = await axios(url, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
-        'Content-Type':'application/json'
+        'Content-Type': 'application/json'
       },
     })
-    if(response.status===200 || response.statusText==='OK'){
-      const {data}=response
-      const jsonData=data 
+    if (response.status === 200 || response.statusText === 'OK') {
+      const { data } = response
+      const jsonData = data
       const updatedData = {
         companyLogoUrl: jsonData.company_logo_url,
         companyWebsiteUrl: jsonData.website_url,
@@ -49,49 +49,52 @@ const JobItemDetails = () => {
         packagePerAnnum: jsonData.salary,
         jobDescription: jsonData.job_description,
         rating: jsonData.rating,
-        skills:jsonData.requirements,
+        skills: jsonData.requirements,
         title: jsonData.title,
-        lifeAtCompany:jsonData.life_at_company
+        lifeAtCompany: jsonData.life_at_company
       }
 
       setTotalDetails(updatedData)
       setIsLoading(false)
-      
+
     }
-     
-     else {
+
+    else {
       setIsFailure(true)
       setIsLoading(false)
     }
   }
+  catch (error) {
+    toast.error(error.message)
+  }
+}
 
   const retryFetching = async () => {
-    /*this.setState({isFailure: false, isLoading: true}, this.getJobDetails)*/
     setIsFailure(false)
     setIsLoading(true)
     await getJobDetails()
   }
 
-  const ApplyJob=async ()=>{
-    try{
+  const ApplyJob = async () => {
+    try {
       const pathParts = window.location.pathname.split('/')
-    const jobId = pathParts[pathParts.length - 1]
-    const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/apply-job/${jobId}`
-    const jwtToken = Cookies.get('userToken')
-    const response = await axios.post(url,{}, {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-        'Content-Type':'application/json'
-      },
-    })
-    if(response.status===200 || response.statusText==='OK'){
-      toast.success("Job Applied Successfully")
+      const jobId = pathParts[pathParts.length - 1]
+      const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/apply-job/${jobId}`
+      const jwtToken = Cookies.get('userToken')
+      const response = await axios.post(url, {}, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+          'Content-Type': 'application/json'
+        },
+      })
+      if (response.status === 200 || response.statusText === 'OK') {
+        toast.success("Job Applied Successfully")
+      }
+      else if (response.status === 409) {
+        toast.error("Job Already Applied")
+      }
     }
-    else if(response.status===409){
-      toast.error("Job Already Applied")
-    }
-    }
-    catch(error){
+    catch (error) {
       console.error(error)
       if (error.response.status === 409) {
         toast.error('You have already applied for this job');
@@ -144,11 +147,11 @@ const JobItemDetails = () => {
     } = totalDetails
     return (
       <>
-      <div className="arrow-container">
-        <button type="button" className="arrow-button" onClick={goBack}>
-          <FaArrowLeft className="arrow-icon-jid" />
+        <div className="arrow-container">
+          <button type="button" className="arrow-button" onClick={goBack}>
+            <FaArrowLeft className="arrow-icon-jid" />
           </button>
-      </div>
+        </div>
         <div className="jid-inner-container">
           <div className="card-top-section">
             <div className="card-top-inner-section">
@@ -158,7 +161,7 @@ const JobItemDetails = () => {
                 className="company-icon"
               />
               <div>
-              <h2 className="jid-job-name1">{companyName}</h2>
+                <h2 className="jid-job-name1">{companyName}</h2>
                 <h2 className="jid-job-name1 pack"> Role: {title}</h2>
                 <div className="rating-container">
                   <FaStar className="star-icon" />
@@ -185,10 +188,10 @@ const JobItemDetails = () => {
             <div className="description-container">
               <h1 className="jid-job-name">Description</h1>
               {
-                JSON.parse(localStorage.getItem('isProfileComplete'))===false ? (<div className='jid-error-container-disabled'><button className='logout-button-disabled'>Apply</button>
-                <div className='jid-inner-error-container'><img src={exclamation} alt='error-logo' className='error-icon'/><p className="jid-error">Complete your profile to apply</p></div></div>) :(<button className='logout-button' onClick={ApplyJob}>Apply</button>)
+                JSON.parse(localStorage.getItem('isProfileComplete')) === false ? (<div className='jid-error-container-disabled'><button className='logout-button-disabled'>Apply</button>
+                  <div className='jid-inner-error-container'><img src={exclamation} alt='error-logo' className='error-icon' /><p className="jid-error">Complete your profile to apply</p></div></div>) : (<button className='logout-button' onClick={ApplyJob}>Apply</button>)
               }
-              
+
             </div>
             <p className="job-desc desc-container job-desc-new">{jobDescription}</p>
             <h1 className="jid-job-name">Skills</h1>
@@ -198,12 +201,12 @@ const JobItemDetails = () => {
               ))}
             </ul>
             <div className="description-container">
-            <h1 className="lac-heading">Life At Company</h1>
-            <a href={companyWebsiteUrl} target="__blank" className="link-item">
+              <h1 className="lac-heading">Life At Company</h1>
+              <a href={companyWebsiteUrl} target="__blank" className="link-item">
                 Visit
                 <FaExternalLinkAlt className="link-icon" />
               </a>
-              </div>
+            </div>
             <div className="life-at-company-container">
               <div className="lac-desc-container">
                 <p className="job-desc-new">{lifeAtCompany}</p>
@@ -214,32 +217,22 @@ const JobItemDetails = () => {
             </div>
           </div>
         </div>
-        {/*
-        <div className="simliar-jobs-container">
-          <h1 className="similar-jobs-heading">Similar Jobs</h1>
-          <ul className="similar-job-items">
-            {similarJobs.map(eachItem => (
-              <SimilarJobsContainer key={eachItem.id} eachItem={eachItem} />
-            ))}
-          </ul>
-        </div>
-        */}
       </>
     )
   }
 
-    return (
-      <>
-        <Header />
-        <div className="jid-bg-container">
-          {isFailure
-            ? renderFailureView()
-            : isLoading
+  return (
+    <>
+      <Header />
+      <div className="jid-bg-container">
+        {isFailure
+          ? renderFailureView()
+          : isLoading
             ? renderLoader()
             : renderContext()}
-        </div>
-      </>
-    )
+      </div>
+    </>
+  )
   //}
 }
 

@@ -1,26 +1,31 @@
-.error-msg-display{
-    color:red;
-    font-size:14px;
+.error-msg-display {
+    color: red;
+    font-size: 14px;
 }
-.link{
-    color:#007bff;
+
+.link {
+    color: #007bff;
 }
-.signup-link{
-    color:white
+
+.signup-link {
+    color: white
 }
-.side-button{
-    width:80px;
-    height:40px;
-    background-color:transparent;
-    border:none;
-    cursor:pointer;
-    background-color:#007bff;
-    margin-left:10px;
+
+.side-button {
+    width: 80px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    background-color: #007bff;
+    margin-left: 10px;
 }
-.extraspace{
-    width:120px;
-    font-size:13px;
+
+.extraspace {
+    width: 120px;
+    font-size: 13px;
 }
-.otp-container{
-    display:flex;
+
+.otp-container {
+    display: flex;
 }

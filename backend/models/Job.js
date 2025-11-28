@@ -16,9 +16,9 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a job description.'],
   },
-  rating:{
-    type:String,
-    required:false
+  rating: {
+    type: String,
+    required: false
   },
   location: {
     type: String,
@@ -26,7 +26,7 @@ const jobSchema = new mongoose.Schema({
   },
   salary: {
     type: Number,
-    required: false, 
+    required: false,
   },
   requirements: {
     type: [String],
@@ -50,27 +50,27 @@ const jobSchema = new mongoose.Schema({
     enum: ['Open', 'Closed'],
     default: 'Open',
   },
-  job_description:{
-    type:String,
+  job_description: {
+    type: String,
     required: true
   },
-  life_at_company:{
-    type:String,
+  life_at_company: {
+    type: String,
     required: false
   },
-  website_url:{
-    type:String,
-    required:false
+  website_url: {
+    type: String,
+    required: false
   },
-  jobApplicants:[{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'User',
-    required:false
+  jobApplicants: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false
   }]
 }, {
   timestamps: true,
 });
 
-const Job = mongoose.model('Job',jobSchema ,'Job');
+const Job = mongoose.model('Job', jobSchema, 'Job');
 
 export default Job;

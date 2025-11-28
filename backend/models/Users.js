@@ -13,20 +13,20 @@ const userSchema = new mongoose.Schema({
     resumeUrl: { type: String, default: null },
     isProfileComplete: { type: Boolean, default: false },
     phone: { type: String, required: false },
-    Appliedjobs:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Job',
-        required:false
+    Appliedjobs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job',
+        required: false
     }],
-    RejectedJobs:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Job',
-        required:false
+    RejectedJobs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job',
+        required: false
     }],
-    AcceptedJobs:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Job',
-        required:false
+    AcceptedJobs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job',
+        required: false
     }]
 }, { timestamps: true })
 

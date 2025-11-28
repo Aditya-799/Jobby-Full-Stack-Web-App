@@ -1,67 +1,61 @@
-import {useState,useEffect,useContext} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {GridLoader} from 'react-spinners'
-import {UserContext} from '../../Context/createContext'
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { GridLoader } from 'react-spinners'
+import { UserContext } from '../../Context/createContext'
 import exclamation from '../../assets/exclamation.png'
 import Cookies from 'js-cookie'
 import './index.css'
 import axios from 'axios'
 
-const ProfileContainer =()=> {
-  const [updatedData,setupdatedData]=useState('')
-  const [isdatafetched,setisdatafetched]=useState(false)
-  const [isLoading,setisLoading]=useState(true)
-  const navigate=useNavigate()
-  const userContext=useContext(UserContext)
+const ProfileContainer = () => {
+  const [updatedData, setupdatedData] = useState('')
+  const [isdatafetched, setisdatafetched] = useState(false)
+  const [isLoading, setisLoading] = useState(true)
+  const navigate = useNavigate()
+  const userContext = useContext(UserContext)
 
-  useEffect(()=>{
+  useEffect(() => {
     getProfiledetails()
-  },[])
+  })
 
   const getProfiledetails = async () => {
-    try{
-    const response=await axios.get(
-      `${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/get/profile`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get('userToken')}`,
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}api/users/get/profile`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get('userToken')}`,
+          }
         }
+      )
+      const { data } = response
+      if (data.success === true) {
+        localStorage.setItem('userData', JSON.stringify(data.user))
+        setupdatedData(data.user)
+        userContext.setUserData(data.user)
+        userContext.setIsProfileComplete(data.user.isProfileComplete)
+        setisdatafetched(true)
+        setisLoading(false)
       }
-    )
-        const {data}=response
-        if (data.success===true) {
-          localStorage.setItem('userData',JSON.stringify(data.user))
-          setupdatedData(data.user)
-          userContext.setUserData(data.user)
-          userContext.setIsProfileComplete(data.user.isProfileComplete)
-          setisdatafetched(true)
-          setisLoading(false)
-         /* this.setState({
-            updatedData: data.user,
-            isdatafetched: true,
-            isLoading: false,*/
-        }
-        else {
-          setisdatafetched(false)
-          setisLoading(false)
-          /*this.setState({isdatafetched: false, isLoading: false})*/
-        }
-      }
-      catch(error) {
-        console.log(error)
+      else {
         setisdatafetched(false)
         setisLoading(false)
-        /*this.setState({isdatafetched: false, isLoading: false})*/
       }
+    }
+    catch (error) {
+      console.log(error)
+      setisdatafetched(false)
+      setisLoading(false)
+    }
   }
 
   const renderProfileContainer = () => {
     return (
-      <div className="profile-container" onClick={()=>navigate('/profile/section')}>
-        <img width="80" height="80" src={updatedData.profilePic} alt="external-Profile-Avatar-web-and-networking-flat-circle-design-circle" className="profile-img"/>
-        <h1 className="name" style={{marginTop: "10px"}}>{updatedData.fullName?updatedData.fullName.charAt(0).toUpperCase() + updatedData.fullName.slice(1):''}</h1>
-        {userContext.isProfileComplete===false && <p className='pc-error-display'><img src={exclamation} alt='exclamation' className='error-icon'/> Complete your profile</p>}
+      <div className="profile-container" onClick={() => navigate('/profile/section')}>
+        <img width="80" height="80" src={updatedData.profilePic} alt="external-Profile-Avatar-web-and-networking-flat-circle-design-circle" className="profile-img" />
+        <h1 className="name" style={{ marginTop: "10px" }}>{updatedData.fullName ? updatedData.fullName.charAt(0).toUpperCase() + updatedData.fullName.slice(1) : ''}</h1>
+        {userContext.isProfileComplete === false && <p className='pc-error-display'><img src={exclamation} alt='exclamation' className='error-icon' /> Complete your profile</p>}
       </div>
     )
   }
@@ -76,10 +70,6 @@ const ProfileContainer =()=> {
     setisdatafetched(false)
     setisLoading(true)
     getProfiledetails()
-    /*this.setState(
-      {isdatafetched: false, isLoading: true},
-      this.getProfiledetails,
-    )*/
   }
 
   const renderretryButton = () => (
@@ -90,16 +80,16 @@ const ProfileContainer =()=> {
     </div>
   )
 
-    return (
-      <>
-        {isLoading
-          ? renderLoader()
-          : isdatafetched
+  return (
+    <>
+      {isLoading
+        ? renderLoader()
+        : isdatafetched
           ? renderProfileContainer()
           : renderretryButton()}
-      </>
-    )
-  }
+    </>
+  )
+}
 
 
 export default ProfileContainer

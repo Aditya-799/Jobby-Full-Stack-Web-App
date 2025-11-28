@@ -16,8 +16,8 @@ const ProfileSection = () => {
     bio: ''
   })
   const [file, setFile] = useState(null);
-  const [message, setMessage] = useState("");
   const [resumeUrl, setResumeUrl] = useState('')
+  const usercontext = useContext(UserContext)
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -26,7 +26,13 @@ const ProfileSection = () => {
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!file) {
-      setMessage("Please select a resume first.");
+      toast.error('Please select a file');
+      return;
+    }
+
+    const filesize= file.size / (1024*1024)
+    if (filesize > 5) {
+      toast.error('File size should be less than 5MB')
       return;
     }
 
@@ -45,19 +51,19 @@ const ProfileSection = () => {
 
       );
 
-      setMessage("Resume uploaded successfully");
-      setResumeUrl(res.data.url)  
+      toast.success("Resume uploaded successfully");
+      setResumeUrl(res.data.url)
       const user = JSON.parse(localStorage.getItem('userData'))
       user.resumeUrl = res.data.url
       localStorage.setItem('userData', JSON.stringify(user))
 
     } catch (error) {
       console.error(error);
-      setMessage("Upload failed: " + error.response?.data?.error);
+      toast.error("Upload failed: " + error.response?.data?.error);
     }
   }
 
-  const usercontext = useContext(UserContext)
+  
 
 
   const updateProfile = async (e) => {
@@ -86,7 +92,7 @@ const ProfileSection = () => {
         user = { ...user, ...updatedData }
         localStorage.setItem('userData', JSON.stringify(user))
         usercontext.setUserData(user)
-        localStorage.setItem('isProfileComplete', 'true')
+        localStorage.setItem('isProfileComplete', JSON.stringify(true))
         usercontext.setIsProfileComplete(true)
         setformData({
           name: '',
@@ -107,7 +113,7 @@ const ProfileSection = () => {
       <Header />
       <div className='profile-section-container'>
         <h1 className="profile-heading">Complete Your profile</h1>
-        {JSON.parse(localStorage.getItem('isProfileComplete')) === false ? <>
+        {(localStorage.getItem('isProfileComplete')===undefined || JSON.parse(localStorage.getItem('isProfileComplete'))===false ||usercontext.isProfileComplete===false) ? <>
           <form className="profile-form" onSubmit={updateProfile}>
             <label htmlFor="fullName" className="profile-label">Full Name</label>
             <input type="text" className='profile-input' placeholder='Full Name' onChange={e => setformData({ ...formData, name: e.target.value })} value={formData.name} />
@@ -121,15 +127,15 @@ const ProfileSection = () => {
             <label htmlFor="resume" className="profile-label">Resume</label>
             <input type="file" className="Upload-resume" onChange={handleFileChange} accept="application/pdf application/doc application/docx" />
             <br />
-            <a 
-                  href={resumeUrl || JSON.parse(localStorage.getItem('userData')).resumeUrl} 
-                  target="_blank" 
-                  style={{ color: "#007bff", textDecoration: "underline", cursor: "pointer", marginRight: "15px" }}
-                >
-                  View Resume
-                </a>
-                <br/>
-                <br/>
+            <a
+              href={resumeUrl || JSON.parse(localStorage.getItem('userData')).resumeUrl}
+              target="_blank"
+              style={{ color: "#007bff", textDecoration: "underline", cursor: "pointer", marginRight: "15px" }}
+            >
+              View Resume
+            </a>
+            <br />
+            <br />
             <button
               onClick={handleUpload}
               style={{
@@ -144,7 +150,6 @@ const ProfileSection = () => {
             >
               Upload
             </button>
-            {message && <p>{message}</p>}
             <button type='submit' className='profile-save-btn'>Update</button>
           </form>
         </> : <>

@@ -14,7 +14,7 @@ const sendEmailOtp = async (email, OTP) => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            html:`
+            html: `
             <h1>Below is the Otp for Verification</h1>
             <h2>The Otp for Your Verification is ${OTP}</h2>
             <p>Note : Otp Expires with in 5 minutes</p>

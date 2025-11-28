@@ -1,9 +1,9 @@
 import Signup from './components/Signup'
 import Login from './components/Login'
 import ProtectedRoute from './components/ProtectedRoute'
-import { ToastContainer,Bounce } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import JobItemDetails from './components/JobItemDetails'
 import ProfileSection from './components/ProfileSection'
 import NotFound from './components/NotFound'
@@ -11,6 +11,8 @@ import Home from './components/Home'
 import AppliedJobsSection from './components/AppliedJobsSection'
 import Jobs from './components/Jobs'
 import './App.css'
+
+
 const employmentTypesList = [
   {
     label: 'Full Time',
@@ -51,40 +53,33 @@ const salaryRangesList = [
 
 
 const App = () => {
-  
+
   return (
     <>
-    <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          theme="light"
-          transition={Bounce}
-          />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="light"
+        transition={Bounce}
+      />
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<ProtectedRoute/>} />
-            <Route path='/home' element={<ProtectedRoute><Home/></ProtectedRoute>} />
-            <Route path='/jobs' element={<Jobs employmentTypesList={employmentTypesList} salaryRangesList={salaryRangesList} />} />
-            <Route path='/jobs/:id' element={<JobItemDetails/>} />
-            <Route path='/profile/section' element={<ProfileSection/>} />
-            <Route path='/jobs/applied' element={<AppliedJobsSection/>} />
-        <Route/>
-        <Route path="*" element={<NotFound/>} />
+        <Route path='/' element={<Home />} />
+        <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path='/jobs' element={<ProtectedRoute><Jobs employmentTypesList={employmentTypesList} salaryRangesList={salaryRangesList} /></ProtectedRoute>} />
+        <Route path='/jobs/:id' element={<ProtectedRoute><JobItemDetails /></ProtectedRoute>} />
+        <Route path='/profile/section' element={<ProtectedRoute><ProfileSection /></ProtectedRoute>} />
+        <Route path='/jobs/applied' element={<ProtectedRoute><AppliedJobsSection /></ProtectedRoute>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )
 }
-  /*
- const App=()=>{
-  return (
-    <ProfileContainer/>
-  )
- }*/
 export default App

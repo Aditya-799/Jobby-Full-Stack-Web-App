@@ -1,22 +1,24 @@
 .nf-bg-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width:100vw;
-    background-color: black;
-    background-size: cover;
-  }
-  .nf-img {
-    width: 100%;
-    max-width: 450px;
-  }
-  .nf-heading {
-    color: #ffffff;
-  }
-  .nf-description {
-    color: #f1f5f9;
-    margin-top: 8px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  background-size: cover;
+}
+
+.nf-img {
+  width: 100%;
+  max-width: 450px;
+}
+
+.nf-heading {
+  color: #ffffff;
+}
+
+.nf-description {
+  color: #f1f5f9;
+  margin-top: 8px;
+}

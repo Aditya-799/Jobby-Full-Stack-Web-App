@@ -1,50 +1,58 @@
-*{
-    margin:0;
-    padding:0;
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
-.applied-jobs-bg-container{
+
+.applied-jobs-bg-container {
     background-color: #000000;
     min-height: 90vh;
-    padding:20px;
-    width:99vw;
+    padding: 20px;
+    width: 99vw;
 }
-.applied-jobs-heading{
-    color:white;
-    font-size:30px;
-    padding-top:20px;
+
+.applied-jobs-heading {
+    color: white;
+    font-size: 30px;
+    padding-top: 20px;
 }
-.applied-job-outer-container{
-    display:flex;
-    justify-content:center;
-    width:100%;
+
+.applied-job-outer-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
-.applied-job-container{
-    background-color:#111827;
-    padding:10px;
-    margin:20px;
-    border-radius:10px;
-    width:80vw;
-    color:white;
+
+.applied-job-container {
+    background-color: #111827;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 10px;
+    width: 80vw;
+    color: white;
 }
-.company-details{
-    display:flex;
+
+.company-details {
+    display: flex;
 }
-.company-details-inner-container{
-    display:flex;
-    width:100%;
+
+.company-details-inner-container {
+    display: flex;
+    width: 100%;
 }
-.applied-jobs-sortby-dropdown{
-    margin-top:20px;
-    margin-bottom:20px;
-    width:300px;
-    padding:10px;
-    background-color:#374151;
-    color:white;
-    font-size:18px;
-    border:none;
-    border-radius:5px;
+
+.applied-jobs-sortby-dropdown {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 300px;
+    padding: 10px;
+    background-color: #374151;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
 }
-.aj-options:hover{
-    background-color:#6366f1;
+
+.aj-options:hover {
+    background-color: #6366f1;
 }

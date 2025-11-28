@@ -1,7 +1,7 @@
 import './index.css'
 
 const SkillItem = props => {
-  const {eachItem} = props
+  const { eachItem } = props
   return (
     <li className="skill-item-container">
       <img src={`/Assets/${eachItem}.png`} alt={eachItem} className="skill-image" />

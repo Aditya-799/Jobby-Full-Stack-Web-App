@@ -1,23 +1,27 @@
-.check-icon{
-    margin-right:10px;
-    cursor:pointer;
+.check-icon {
+    margin-right: 10px;
+    cursor: pointer;
 }
-.cross-icon{
-    margin-left:10px;
-    cursor:pointer;
+
+.cross-icon {
+    margin-left: 10px;
+    cursor: pointer;
 }
-.profile-not-completed{
-    display:flex;
-    flex-direction:column;
+
+.profile-not-completed {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height:80%;
+    height: 80%;
 }
-.profile-not-completed-image{
-    width:200px;
-    height:200px;
+
+.profile-not-completed-image {
+    width: 200px;
+    height: 200px;
 }
-.profile-not-completed-description{
-    margin-top:20px;
-    font-size:28px;
+
+.profile-not-completed-description {
+    margin-top: 20px;
+    font-size: 28px;
 }

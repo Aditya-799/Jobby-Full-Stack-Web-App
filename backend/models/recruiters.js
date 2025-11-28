@@ -14,23 +14,23 @@ const RecruiterSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    password:{
+    password: {
         type: String,
         required: true,
-        select:false
+        select: false
     },
-    phone:{
-        type:String,
-        default:"",
+    phone: {
+        type: String,
+        default: "",
         required: false
     },
-    password:{
+    password: {
         type: String,
         required: true
     },
-    profilePic:{
+    profilePic: {
         type: String,
-        default:"",
+        default: "",
         required: true
     },
 
@@ -38,7 +38,7 @@ const RecruiterSchema = new mongoose.Schema({
     // This links the recruiter to a separate Company document
     companyName: {
         type: String,
-        default:"",
+        default: "",
         required: false,
         trim: true
     },
@@ -50,44 +50,44 @@ const RecruiterSchema = new mongoose.Schema({
     },
     companyLocation: {
         type: String,
-        default:"",
+        default: "",
         required: false, // Optional but useful
         trim: true
     },
-    companyWebsiteUrl:{
+    companyWebsiteUrl: {
         type: String,
         default: "",
         required: false, // Optional but useful
         trim: true
     },
-    companyAddress:{
+    companyAddress: {
         type: String,
         default: "",
         required: false
     },
-    companyLogoUrl:{
-        type:String,
+    companyLogoUrl: {
+        type: String,
         default: "",
         required: false
     },
-    companyReview:{
+    companyReview: {
         type: Number,
-        default:0,
+        default: 0,
         required: false
     },
-    companyContactNumber:{
-        type:String,
-        default:"",
-        required: false
-    },
-    companyLinkedInUrl:{
+    companyContactNumber: {
         type: String,
-        default:"",
+        default: "",
         required: false
     },
-    companyCorporateEmail:{
-        type:String,
-        default:"",
+    companyLinkedInUrl: {
+        type: String,
+        default: "",
+        required: false
+    },
+    companyCorporateEmail: {
+        type: String,
+        default: "",
         required: false
     },
     // 3. PLATFORM ROLE & STATUS
@@ -101,31 +101,31 @@ const RecruiterSchema = new mongoose.Schema({
         type: String,
         enum: ['Active', 'Suspended', 'Pending'],
         default: 'Active',
-        required:false
+        required: false
     },
     isProfileComplete: {
         type: Boolean,
         default: false,
     },
-    Jobsposted:[ //It stores the Jobs object id so that we can get all the details and populate it with in the controller
+    Jobsposted: [ //It stores the Jobs object id so that we can get all the details and populate it with in the controller
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Job',
             required: false
         }
     ],
-    Acceptedcandidates:[{
-        jobId:{
+    Acceptedcandidates: [{
+        jobId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Job',
             required: false
         },
-        candidateId:{
+        candidateId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: false
         }
-}]
+    }]
 
 }, {
     timestamps: true // Adds 'createdAt' and 'updatedAt' fields automatically

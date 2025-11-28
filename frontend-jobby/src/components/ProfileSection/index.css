@@ -1,31 +1,35 @@
-.profile-section-container{
-    width:100vw;
-    min-height:90vh;
-     padding-bottom: 20px;
+.profile-section-container {
+    width: 100vw;
+    min-height: 90vh;
+    padding-bottom: 20px;
     background-color: #000000;
-    padding:30px;
-    align-items:center;
+    padding: 30px;
+    align-items: center;
 }
-.profile-heading{
-    font-size:34px;
-    margin-bottom:20px;
+
+.profile-heading {
+    font-size: 34px;
+    margin-bottom: 20px;
 }
-.profile-form{
-    display:flex;
-    flex-direction:column;
-    min-width:100%;
-    max-width:700px;
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    max-width: 700px;
 }
-.profile-label{
+
+.profile-label {
     font-size: 12px;
     color: #f8fafc;
     margin-top: 20px;
     margin-bottom: 8px;
 }
-.profile-input{
+
+.profile-input {
     padding: 8px;
     width: 100%;
-    max-width:700px;
+    max-width: 700px;
     height: 40px;
     background-color: transparent;
     outline: none;
@@ -33,49 +37,56 @@
     border-radius: 4px;
     color: #f8fafc;
 }
-.profile-text-input{
+
+.profile-text-input {
     padding: 8px;
     width: 100%;
-    max-width:700px;
+    max-width: 700px;
     background-color: transparent;
     outline: none;
     border: 1px solid #64748b;
     border-radius: 4px;
     color: #f8fafc;
 }
-.profile-save-btn{
-    margin-top:20px;
-    width:100px;
-    height:40px;
-    background-color:#2563eb;
-    color:#ffffff;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
+
+.profile-save-btn {
+    margin-top: 20px;
+    width: 100px;
+    height: 40px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
- .profile-completed-icon{
-    width:60px;
-    height:60px;
-    margin-bottom:20px;
-   }
-   .recruiter-completed-container{
-    display:flex;
-    height:90%;
+
+.profile-completed-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.recruiter-completed-container {
+    display: flex;
+    height: 90%;
     flex-direction: column;
-    justify-content:center;
+    justify-content: center;
     align-items: center;
-   }
-   .card-container-recruiter-form{
-    width:400px;
-    padding:10px;
-    background-color:#64748b;
-    display:flex;
+}
+
+.card-container-recruiter-form {
+    width: 400px;
+    padding: 10px;
+    background-color: #64748b;
+    display: flex;
     flex-direction: column;
-    align-items: center;;
-    border-radius:10px;
-   }
-   .recruiter-form-description{
-    margin-top:10px;
-    padding-bottom:10px;
-    color:#f8fafc;
-   }
+    align-items: center;
+    ;
+    border-radius: 10px;
+}
+
+.recruiter-form-description {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    color: #f8fafc;
+}

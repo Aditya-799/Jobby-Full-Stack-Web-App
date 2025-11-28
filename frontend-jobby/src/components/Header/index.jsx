@@ -16,6 +16,7 @@ const Header = () => {
     setIsProfileComplete(false);
     localStorage.removeItem('userData');
     localStorage.removeItem('isProfileComplete');
+    localStorage.removeItem('role')
     navigate('/login', { replace: true })
   }
 
@@ -48,7 +49,8 @@ const Header = () => {
           </button>
         </li>
       </ul>
-
+      {Cookies.get('userToken')!==undefined?(
+        <>
       <div className="nav-items-section">
         <Link to="/home" className="nav-item">
           <p>Home</p>
@@ -65,6 +67,23 @@ const Header = () => {
           Logout
         </button>
       </div>
+      </>
+      ):(
+        <>
+         <div className="nav-items-section">
+          <Link to="/login" className="nav-item">
+            <button type="button" className="logout-button">
+          Signin
+        </button>
+        </Link>
+        <Link>
+        <button type="button" className="logout-button" onClick={handleLogout}>
+          Signup
+        </button>
+        </Link>
+          </div>
+        </>
+      )}
     </div>
   )
 }

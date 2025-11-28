@@ -1,71 +1,81 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.outer-container{
-    display:flex;
-    justify-content: center;
-    margin-top:20px;
-    width:100%;
-    height:100%;
+
+.outer-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+  height: 100%;
 }
 
 .card-container {
-    width: 90%;
-    padding: 10px;
-    background-color: #2c364c;
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-  }
-  .recruiter-form{
-    display:flex;
-    flex-wrap:wrap;
-  }
-   .label-find-jobs {
-    font-size: 12px;
-    color: #f8fafc;
-    margin-top: 10px;
-    margin-bottom: 2px;
-   }
-   .input-find-jobs{
-    padding: 8px;
-    width: 100%;
-    height: 40px;
-    background-color: transparent;
-    outline: none;
-    border: 1px solid #64748b;
-    border-radius: 4px;
-    color: #f8fafc;
-    margin-top:6px;
-   }
-   .button-find-jobs{
-    margin-top:20px;
-   }
-   .profile-completed-icon{
-    width:60px;
-    height:60px;
-    margin-bottom:20px;
-   }
-   .recruiter-completed-container{
-    display:flex;
-    height:90%;
-    flex-direction: column;
-    justify-content:center;
-    align-items: center;
-   }
-   .card-container-recruiter-form{
-    width:400px;
-    padding:10px;
-    background-color:#64748b;
-    display:flex;
-    flex-direction: column;
-    align-items: center;;
-    border-radius:10px;
-   }
-   .recruiter-form-description{
-    margin-top:10px;
-    padding-bottom:10px;
-    color:#f8fafc;
-   }
+  width: 90%;
+  padding: 10px;
+  background-color: #2c364c;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.recruiter-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.label-find-jobs {
+  font-size: 12px;
+  color: #f8fafc;
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+.input-find-jobs {
+  padding: 8px;
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  outline: none;
+  border: 1px solid #64748b;
+  border-radius: 4px;
+  color: #f8fafc;
+  margin-top: 6px;
+}
+
+.button-find-jobs {
+  margin-top: 20px;
+}
+
+.profile-completed-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+.recruiter-completed-container {
+  display: flex;
+  height: 90%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-container-recruiter-form {
+  width: 400px;
+  padding: 10px;
+  background-color: #64748b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  ;
+  border-radius: 10px;
+}
+
+.recruiter-form-description {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  color: #f8fafc;
+}

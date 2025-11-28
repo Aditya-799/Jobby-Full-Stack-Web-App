@@ -1,95 +1,94 @@
-import {useState,useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import JobsPosted from '../JobsPosted'
 import ApplicationsTab from '../ApplicationsTab'
 import RecruiterForm from '../RecruiterForm'
 import Cookies from 'js-cookie'
 import axios from 'axios'
-import { Briefcase, FileText,LogOut,User} from 'lucide-react';
-    import './index.css'
+import { Briefcase, FileText, LogOut, User } from 'lucide-react';
+import './index.css'
 
-    const AdminFolder=()=> {
-        const [activeOption, setActiveOption] = useState('Jobs');
-        const [jobType, setJobType] = useState('All Types');
-        const [isProfileCompleted,setIsProfileCompleted]=useState(false)
+const AdminFolder = () => {
+    const [activeOption, setActiveOption] = useState('Jobs');
+    const [jobType, setJobType] = useState('All Types');
+    const [isProfileCompleted, setIsProfileCompleted] = useState(false)
 
-        const getProfile=async()=>{
-            const url=`${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/isrecruiterverified`
-            const headers={
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
-            }
-            const response=await axios.get(url,{headers})
-            if(response.status===200 || response.statusText==='OK'){
-                setIsProfileCompleted(response.data.iscompleted)
-            
-            }
+    const getProfile = async () => {
+        const url = `${import.meta.env.VITE_REACT_APP_BASE_URL}api/jobs/get/isrecruiterverified`
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Cookies.get('recruiterToken')}`
         }
+        const response = await axios.get(url, { headers })
+        if (response.status === 200 || response.statusText === 'OK') {
+            setIsProfileCompleted(response.data.iscompleted)
 
-
-        useEffect(()=>{
-            getProfile()
-        },[])
-
-        const routetologin = () => {
-            Cookies.remove('recruiterToken')
-            window.location.replace('http://localhost:5174/login')
         }
-
-        const Jobs=()=>{
-            setActiveOption("Jobs")
-        }
-
-        const Applications=()=>{
-            setActiveOption("Applications")
-        }
-
-        const Logouttab=()=>{
-            setActiveOption("Logout")
-        }
-
-        const changeType=(event)=>{
-            setJobType(event.target.value)
-        }
-        const Profiletab=()=>{
-            setActiveOption("Profile")
-        }
-
-        return(
-                <div className="as-container">
-                    <div className="as-sidebar">
-                        <h1 className="as-heading">Jobby</h1>
-                        <p className="as-description">Admin dashboard</p>
-                        <ul className="as-sidebar-items-container">
-                            <li className={`as-sidebar-items ${activeOption==="Jobs"? "active":""}`} onClick={Jobs}>
-                                <Briefcase className="as-icons"/>
-                                <p className="as-sideheading">Jobs</p>
-                            </li>
-                            <li className={`as-sidebar-items ${activeOption==="Applications"? "active":""}`} onClick={Applications}>
-                                <FileText className="as-icons"/> 
-                                <p className="as-sideheading">Applications</p>
-                            </li>
-                            <li className={`as-sidebar-items ${activeOption==="Profile"? "active":""}`} onClick={Profiletab}>
-                                <User className="as-icons"/>
-                                <p className="as-sideheading">Profile</p>
-                            </li>
-                            <li className={`as-sidebar-items ${activeOption==="Logout"? "active":""}`} onClick={Logouttab}>
-                                <button onClick={() => routetologin()} className="asc-logout-button">
-                                    <LogOut className="as-icons"/> 
-                                    <p className="as-sideheading">Logout</p>
-                                </button>
-                            </li>  
-                        </ul>
-                    </div>
-
-                     {activeOption==="Jobs" && <JobsPosted jobType={jobType} changeType={changeType} isProfileCompleted={isProfileCompleted}/>}
-                     {activeOption==="Applications" && <ApplicationsTab jobType={jobType} changeType={changeType}  isProfileCompleted={isProfileCompleted}/>}
-                    {activeOption==="Profile" && <RecruiterForm isProfileCompleted={isProfileCompleted}/> }
-                </div>
-            )
-        }
-
-    export default AdminFolder
+    }
 
 
+    useEffect(() => {
+        getProfile()
+    }, [])
 
-    //, Eye, Edit, Trash2, Download, User, X, Star, Menu 
+    const routetologin = () => {
+        Cookies.remove('recruiterToken')
+        Cookies.remove('role')
+        const loginUrl = `${import.meta.env.VITE_REACT_APP_FRONTEND_URL}login`
+        window.location.replace(loginUrl)
+    }
+
+    const Jobs = () => {
+        setActiveOption("Jobs")
+    }
+
+    const Applications = () => {
+        setActiveOption("Applications")
+    }
+
+    const Logouttab = () => {
+        setActiveOption("Logout")
+    }
+
+    const changeType = (event) => {
+        setJobType(event.target.value)
+    }
+    const Profiletab = () => {
+        setActiveOption("Profile")
+    }
+
+    return (
+        <div className="as-container">
+            <div className="as-sidebar">
+                <h1 className="as-heading">Jobby</h1>
+                <p className="as-description">Admin dashboard</p>
+                <ul className="as-sidebar-items-container">
+                    <li className={`as-sidebar-items ${activeOption === "Jobs" ? "active" : ""}`} onClick={Jobs}>
+                        <Briefcase className="as-icons" />
+                        <p className="as-sideheading">Jobs</p>
+                    </li>
+                    <li className={`as-sidebar-items ${activeOption === "Applications" ? "active" : ""}`} onClick={Applications}>
+                        <FileText className="as-icons" />
+                        <p className="as-sideheading">Applications</p>
+                    </li>
+                    <li className={`as-sidebar-items ${activeOption === "Profile" ? "active" : ""}`} onClick={Profiletab}>
+                        <User className="as-icons" />
+                        <p className="as-sideheading">Profile</p>
+                    </li>
+                    <li className={`as-sidebar-items ${activeOption === "Logout" ? "active" : ""}`} onClick={Logouttab}>
+                        <button onClick={() => routetologin()} className="asc-logout-button">
+                            <LogOut className="as-icons" />
+                            <p className="as-sideheading">Logout</p>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            {activeOption === "Jobs" && <JobsPosted jobType={jobType} changeType={changeType} isProfileCompleted={isProfileCompleted} />}
+            {activeOption === "Applications" && <ApplicationsTab jobType={jobType} changeType={changeType} isProfileCompleted={isProfileCompleted} />}
+            {activeOption === "Profile" && <RecruiterForm isProfileCompleted={isProfileCompleted} />}
+        </div>
+    )
+}
+
+export default AdminFolder
+
