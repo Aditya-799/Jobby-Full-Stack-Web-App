@@ -2,6 +2,7 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Cookies from 'js-cookie'
+import { SyncLoader } from 'react-spinners'
 import axios from "axios";
 import './index.css';
 
@@ -13,6 +14,7 @@ const Signup = () => {
   const [Otp, setOtp] = useState('')
   const [reviewOtpbox, setReviewOtpbox] = useState(false)
   const [emailverified, setemailverified] = useState(false)
+  const [otpLoader,setotpLoader]=useState(false)
   const navigate = useNavigate()
   const changedUsername = event => {
     setUsername(event.target.value)
@@ -30,6 +32,7 @@ const Signup = () => {
   }
   const sendOtp = async (event) => {
     event.preventDefault()
+    setotpLoader(true)
     try {
       const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/sendOtp`, {
         email
@@ -37,16 +40,23 @@ const Signup = () => {
       if (response.status === 200) {
         toast.success('Otp sent successfully');
         setReviewOtpbox(true)
-      } else {
+      } 
+       else if(response.status === 400){
+        toast.error('Otp already sent');
+      }
+      else {
         toast.error('Otp sending failed');
       }
+      setotpLoader(false)
     }
     catch (error) {
       toast.error(error.message)
+      setotpLoader(false)
     }
   }
   const verifyOtp = async (e) => {
     e.preventDefault()
+    setotpLoader(false)
     try {
       const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}api/auth/verifyOtp`, {
         email,
@@ -56,7 +66,11 @@ const Signup = () => {
       if (response.status === 201) {
         toast.success('Otp verified successfully');
         setemailverified(true)
-      } else {
+      }
+      else if(response.status === 400){
+        toast.error('Otp already sent');
+      }
+      else {
         toast.error('Otp verification failed');
       }
     }
@@ -134,6 +148,12 @@ const Signup = () => {
               value={email}
             />
             <button type="button" className='side-button extraspace' onClick={sendOtp}>Send OTP</button>
+            {otpLoader===true && <SyncLoader
+                color="white"
+                loading={otpLoader}
+                size={6}
+                aria-label="Loading Spinner"
+            />}
           </div>
           {reviewOtpbox && <>
             <label htmlFor="Verifyemail" className="username-heading">Verify Email</label>
